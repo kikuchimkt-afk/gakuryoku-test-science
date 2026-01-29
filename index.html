@@ -128,6 +128,21 @@
 
 <body class="text-gray-800">
 
+    <!-- フォルダ再接続バナー（権限が必要な場合に表示） -->
+    <div id="reconnectBanner" class="hidden bg-yellow-50 border-b border-yellow-200 px-4 py-3">
+        <div class="flex items-center justify-center gap-4 max-w-4xl mx-auto">
+            <div class="flex items-center gap-2">
+                <span class="text-yellow-600 text-xl">⚠️</span>
+                <span class="text-yellow-800 font-medium">ローカルフォルダへの接続が必要です</span>
+                <span id="reconnectFolderName" class="text-yellow-700 text-sm"></span>
+            </div>
+            <button id="reconnectBtn" onclick="requestFolderPermission()"
+                class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-1.5 rounded-lg font-semibold text-sm shadow transition-colors">
+                📁 フォルダに再接続
+            </button>
+        </div>
+    </div>
+
     <div class="flex flex-col md:flex-row h-screen">
 
         <!-- 1. フィルター (左パネル) -->
@@ -238,14 +253,20 @@
                     ＋ 問題登録
                 </a>
             </div>
-            <div class="mb-4 text-sm text-gray-600">
-                <span id="resultCount">0</span> 件の結果
-                <span id="localCountBadge"
-                    class="hidden ml-2 bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs"></span>
-                <span id="onlineBadge"
-                    class="hidden ml-2 bg-white border border-gray-200 text-gray-600 px-3 py-1 rounded-full text-xs font-bold shadow-sm">
-                    オンライン
-                </span>
+            <div class="mb-4 flex items-center justify-between">
+                <div class="text-sm text-gray-600">
+                    <span id="resultCount">0</span> 件の結果
+                    <span id="localCountBadge"
+                        class="hidden ml-2 bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs"></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span id="folderStatusBadge"
+                        class="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-500">未接続</span>
+                    <button id="connectFolderBtn" onclick="requestFolderPermission()"
+                        class="bg-indigo-100 hover:bg-indigo-200 text-indigo-700 px-3 py-1 rounded-lg text-sm font-medium transition-colors flex items-center gap-1">
+                        📁 フォルダに接続
+                    </button>
+                </div>
             </div>
             <div id="resultsContainer" class="space-y-4">
                 <!-- 検索結果はJSで生成 -->
@@ -5338,6 +5359,7 @@
                         isFileSystemMode = false;
                         console.log('restoreDirectoryHandle: Permission not granted, showing pending status');
                         updateStorageStatusPending();
+                        showReconnectBanner();
                         return false;
                     }
                 } else {
@@ -5346,6 +5368,7 @@
                     if (savedFolderName) {
                         console.log('restoreDirectoryHandle: No handle, but found saved folder name:', savedFolderName);
                         updateStorageStatusPendingWithName(savedFolderName);
+                        showReconnectBanner();
                     }
                 }
             } catch (e) {
@@ -5398,6 +5421,96 @@
                     statusEl.textContent = 'ブラウザ内保存';
                     statusEl.className = 'text-xs font-medium px-2 py-1 rounded-full bg-white text-gray-600 border border-gray-200 shadow-sm';
                     if (pathEl) pathEl.textContent = '未選択 (IndexedDB)';
+                }
+            }
+
+            // フォルダ接続状態バッジを更新
+            updateFolderStatusBadge();
+
+            // 権限取得後はバナーを非表示
+            hideReconnectBanner();
+        }
+
+        // === フォルダ接続状態バッジ更新 ===
+        function updateFolderStatusBadge() {
+            const badge = document.getElementById('folderStatusBadge');
+            const btn = document.getElementById('connectFolderBtn');
+
+            if (!badge) return;
+
+            if (isFileSystemMode && dirHandle) {
+                // 接続済み
+                badge.textContent = '✓ ' + dirHandle.name;
+                badge.className = 'text-xs px-2 py-1 rounded-full bg-green-100 text-green-700';
+                if (btn) {
+                    btn.textContent = '📁 再選択';
+                    btn.className = 'bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1 rounded-lg text-sm font-medium transition-colors flex items-center gap-1';
+                }
+            } else {
+                // 未接続
+                badge.textContent = '未接続';
+                badge.className = 'text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-500';
+                if (btn) {
+                    btn.textContent = '📁 フォルダに接続';
+                    btn.className = 'bg-indigo-100 hover:bg-indigo-200 text-indigo-700 px-3 py-1 rounded-lg text-sm font-medium transition-colors flex items-center gap-1';
+                }
+            }
+        }
+
+        // === 再接続バナー表示 ===
+        function showReconnectBanner() {
+            const banner = document.getElementById('reconnectBanner');
+            const folderNameEl = document.getElementById('reconnectFolderName');
+            if (banner) {
+                banner.classList.remove('hidden');
+                // フォルダ名を表示
+                if (folderNameEl) {
+                    const name = dirHandle ? dirHandle.name : localStorage.getItem('savedFolderName');
+                    if (name) {
+                        folderNameEl.textContent = `(${name})`;
+                    }
+                }
+            }
+        }
+
+        // === 再接続バナー非表示 ===
+        function hideReconnectBanner() {
+            const banner = document.getElementById('reconnectBanner');
+            if (banner) {
+                banner.classList.add('hidden');
+            }
+        }
+
+        // === 権限再取得（ユーザークリックで呼び出し） ===
+        async function requestFolderPermission() {
+            try {
+                if (dirHandle) {
+                    // 既存のハンドルで権限を再要求
+                    const permission = await dirHandle.requestPermission({ mode: 'readwrite' });
+                    if (permission === 'granted') {
+                        isFileSystemMode = true;
+                        hideReconnectBanner();
+                        updateStorageStatus();
+
+                        // ローカル問題を読み込み
+                        localProblems = await loadLocalProblems();
+                        reloadAllData();
+
+                        console.log('Permission granted, loaded', localProblems.length, 'local problems');
+                    }
+                } else {
+                    // ハンドルがない場合は新規選択
+                    await selectFolder();
+                    if (dirHandle) {
+                        await saveSettings();
+                        localProblems = await loadLocalProblems();
+                        reloadAllData();
+                    }
+                }
+            } catch (e) {
+                console.error('requestFolderPermission error:', e);
+                if (e.name !== 'AbortError') {
+                    alert('フォルダへの接続に失敗しました: ' + e.message);
                 }
             }
         }
@@ -5610,8 +5723,8 @@
                     exportedData = await res.json();
                     console.log('Loaded index.json:', exportedData.length);
                     // オンラインバッジを表示
-                    const onlineBadge = document.getElementById('onlineBadge');
-                    if (onlineBadge) onlineBadge.classList.remove('hidden');
+                    // const onlineBadge = document.getElementById('onlineBadge');
+                    // if (onlineBadge) onlineBadge.classList.remove('hidden');
                 } else {
                     console.log('index.json response not ok:', res.status);
                 }
