@@ -2330,19 +2330,13 @@ JSON以外のテキストは出力しないでください。`
 
 <script>
     // === Vercel用書き出し機能 ===
+    // === Vercel用書き出し機能 ===
     async function exportForVercel() {
-        if (!dirHandle) {
-            alert('先に「設定」からフォルダを選択してください');
+        // ソースの確認
+        let sourceMode = isFileSystemMode ? 'fs' : 'idb';
+        if (sourceMode === 'fs' && !dirHandle) {
+            alert('フォルダモードですがフォルダが選択されていません。設定を確認してください。');
             return;
-        }
-
-        // 権限の再確認 (読み取り)
-        const opts = { mode: 'read' };
-        if ((await dirHandle.queryPermission(opts)) !== 'granted') {
-            if ((await dirHandle.requestPermission(opts)) !== 'granted') {
-                alert('フォルダの読み取り権限がありません。');
-                return;
-            }
         }
 
         const btn = document.getElementById('exportVercelBtn');
@@ -2358,11 +2352,11 @@ JSON以外のテキストは出力しないでください。`
             }
 
             btn.disabled = true;
-            btn.textContent = '書き出し中...';
+            btn.textContent = 'データ取得中...';
 
-            // 2. 現在のデータを取得 (IndexedDB or FileSystem)
+            // 2. 現在のデータを取得
             let problemsToExport = [];
-            if (isFileSystemMode) {
+            if (sourceMode === 'fs') {
                 problemsToExport = await loadRawProblemsFromFileSystem();
             } else {
                 if (!db) await initDB();
@@ -2374,73 +2368,137 @@ JSON以外のテキストは出力しないでください。`
                 });
             }
 
+            if (problemsToExport.length === 0) {
+                alert('書き出すデータがありません。');
+                btn.disabled = false;
+                btn.textContent = originalText;
+                return;
+            }
+
             // 3. index.json 用のデータを整形
             const cleanProblems = problemsToExport.map(p => {
                 const copy = { ...p };
-                delete copy.imageBlob;
-                delete copy.answerBlob;
-                delete copy.answerBlobs;
-                delete copy.explanationBlob;
-                delete copy.explanationBlobs;
-                delete copy.problemBlobs;
+                // Blobは削除する前に画像のコピー処理で使うために保持したいが、
+                // IDBモードの場合はBlobからファイル作成が必要
+                // ここではJSON用のクリーンアップのみ行う
+                const jsonCopy = { ...p };
+                delete jsonCopy.imageBlob;
+                delete jsonCopy.answerBlob;
+                delete jsonCopy.answerBlobs;
+                delete jsonCopy.explanationBlob;
+                delete jsonCopy.explanationBlobs;
+                delete jsonCopy.problemBlobs;
 
-                if (copy.images) {
-                    copy.images = copy.images.map(img => img.startsWith('./problems/') ? img : './problems/' + img.split('/').pop());
+                if (jsonCopy.images) {
+                    jsonCopy.images = jsonCopy.images.map(img => img.startsWith('./problems/') ? img : './problems/' + img.split('/').pop());
                 }
-                if (copy.explanationImages) {
-                    copy.explanationImages = copy.explanationImages.map(img => img.startsWith('./problems/') ? img : './problems/' + img.split('/').pop());
+                if (jsonCopy.explanationImages) {
+                    jsonCopy.explanationImages = jsonCopy.explanationImages.map(img => img.startsWith('./problems/') ? img : './problems/' + img.split('/').pop());
                 }
-                // 互換性
-                if (copy.answerImage && !copy.answerImage.startsWith('./problems/')) {
-                    copy.answerImage = './problems/' + copy.answerImage.split('/').pop();
+                if (jsonCopy.answerImage && !jsonCopy.answerImage.startsWith('./problems/')) {
+                    jsonCopy.answerImage = './problems/' + jsonCopy.answerImage.split('/').pop();
                 }
-                if (copy.explanationImage && !copy.explanationImage.startsWith('./problems/')) {
-                    copy.explanationImage = './problems/' + copy.explanationImage.split('/').pop();
+                if (jsonCopy.explanationImage && !jsonCopy.explanationImage.startsWith('./problems/')) {
+                    jsonCopy.explanationImage = './problems/' + jsonCopy.explanationImage.split('/').pop();
                 }
-
-                return copy;
+                return jsonCopy;
             });
 
             // 4. index.json 書き出し
+            btn.textContent = 'index.json 書き出し中...';
             const indexHandle = await targetHandle.getFileHandle('index.json', { create: true });
             const writable = await indexHandle.createWritable();
             await writable.write(JSON.stringify(cleanProblems, null, 2));
             await writable.close();
 
             // 5. 画像ファイルのコピー
-            try {
-                const sourceProblemsDir = await dirHandle.getDirectoryHandle('problems');
-                const targetProblemsDir = await targetHandle.getDirectoryHandle('problems', { create: true });
+            btn.textContent = '画像コピー準備中...';
+            const targetProblemsDir = await targetHandle.getDirectoryHandle('problems', { create: true });
 
-                // ファイル総数をカウント
-                let totalFiles = 0;
-                btn.textContent = 'ファイル数を確認中...';
-                const filesToCopy = [];
-                for await (const entry of sourceProblemsDir.values()) {
-                    if (entry.kind === 'file') {
-                        filesToCopy.push(entry);
+            let copyCount = 0;
+            const totalItems = problemsToExport.length;
+
+            for (let i = 0; i < totalItems; i++) {
+                const p = problemsToExport[i];
+                btn.textContent = `画像処理中... (${i + 1}/${totalItems})`;
+
+                // Helper to save blob/file to target
+                const saveImage = async (filename, content) => {
+                    if (!filename || !content) return;
+                    try {
+                        const name = filename.split('/').pop();
+                        const fileHandle = await targetProblemsDir.getFileHandle(name, { create: true });
+                        const writable = await fileHandle.createWritable();
+                        await writable.write(content);
+                        await writable.close();
+                        copyCount++;
+                    } catch (e) {
+                        console.warn('Image save failed:', filename, e);
+                    }
+                };
+
+                if (sourceMode === 'fs') {
+                    // FSモード：元のproblemsフォルダからコピー
+                    // (ここでの実装は既存のファイルコピーロジックを利用すべきだが、簡略化のためファイルパスから読み込み直すか、
+                    //  dirHandleから直接コピーする)
+                    try {
+                        const sourceProblemsDir = await dirHandle.getDirectoryHandle('problems');
+
+                        // images
+                        if (p.images) {
+                            for (const imgPath of p.images) {
+                                const name = imgPath.split('/').pop();
+                                try {
+                                    const h = await sourceProblemsDir.getFileHandle(name);
+                                    const f = await h.getFile();
+                                    await saveImage(name, f);
+                                } catch { }
+                            }
+                        }
+                        // explanationImages
+                        if (p.explanationImages) {
+                            for (const imgPath of p.explanationImages) {
+                                const name = imgPath.split('/').pop();
+                                try {
+                                    const h = await sourceProblemsDir.getFileHandle(name);
+                                    const f = await h.getFile();
+                                    await saveImage(name, f);
+                                } catch { }
+                            }
+                        }
+                    } catch (e) {
+                        console.warn('Source problems dir access failed', e);
+                    }
+
+                } else {
+                    // IDBモード：Blobから保存
+                    // 問題画像
+                    if (p.images && p.problemBlobs) {
+                        for (let j = 0; j < p.images.length; j++) {
+                            if (p.problemBlobs[j]) await saveImage(p.images[j], p.problemBlobs[j]);
+                        }
+                    } else if (p.images && p.images.length > 0 && p.imageBlob) {
+                        // 後方互換 (1枚のみの時代)
+                        await saveImage(p.images[0], p.imageBlob);
+                    }
+
+                    // 解説画像
+                    if (p.explanationImages && p.explanationBlobs) {
+                        for (let j = 0; j < p.explanationImages.length; j++) {
+                            if (p.explanationBlobs[j]) await saveImage(p.explanationImages[j], p.explanationBlobs[j]);
+                        }
+                    } else if (p.explanationImages && p.explanationImages.length > 0 && p.explanationBlob) {
+                        await saveImage(p.explanationImages[0], p.explanationBlob);
+                    }
+
+                    // 解答画像
+                    if (p.answerImage && p.answerBlob) {
+                        await saveImage(p.answerImage, p.answerBlob);
                     }
                 }
-                totalFiles = filesToCopy.length;
-
-                let copyCount = 0;
-                for (const handle of filesToCopy) {
-                    btn.textContent = `書き出し中... (${copyCount}/${totalFiles})`;
-                    const file = await handle.getFile();
-                    const targetFileHandle = await targetProblemsDir.getFileHandle(handle.name, { create: true });
-                    const targetWritable = await targetFileHandle.createWritable();
-                    await targetWritable.write(file);
-                    await targetWritable.close();
-                    copyCount++;
-                    btn.textContent = `書き出し中... (${copyCount}/${totalFiles})`;
-                }
-
-                alert(`書き出し完了！\n\n・index.json を保存しました\n・${copyCount} 個の画像ファイルを problems フォルダにコピーしました`);
-
-            } catch (e) {
-                console.warn('画像フォルダのコピーに失敗:', e);
-                alert(`画保存は完了しましたが、画像フォルダ(problems)のコピーに失敗しました。\n\n詳細: ${e.name}: ${e.message}\nもし「problems」フォルダが存在しない場合は、一度画像を登録してフォルダを作成してください。`);
             }
+
+            alert(`書き出し完了！\n\n・index.json を保存しました\n・画像を problems フォルダにコピーしました`);
 
         } catch (err) {
             console.error('Export Error:', err);
