@@ -242,6 +242,10 @@
                 <span id="resultCount">0</span> 件の結果
                 <span id="localCountBadge"
                     class="hidden ml-2 bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs"></span>
+                <span id="onlineBadge"
+                    class="hidden ml-2 bg-white border border-gray-200 text-gray-600 px-3 py-1 rounded-full text-xs font-bold shadow-sm">
+                    オンライン
+                </span>
             </div>
             <div id="resultsContainer" class="space-y-4">
                 <!-- 検索結果はJSで生成 -->
@@ -5600,10 +5604,16 @@
             // index.json (Vercel用エクスポートデータ) の読み込み
             let exportedData = [];
             try {
-                const res = await fetch('./index.json');
+                // キャッシュ回避のためにタイムスタンプ付与
+                const res = await fetch('./index.json?t=' + new Date().getTime());
                 if (res.ok) {
                     exportedData = await res.json();
                     console.log('Loaded index.json:', exportedData.length);
+                    // オンラインバッジを表示
+                    const onlineBadge = document.getElementById('onlineBadge');
+                    if (onlineBadge) onlineBadge.classList.remove('hidden');
+                } else {
+                    console.log('index.json response not ok:', res.status);
                 }
             } catch (e) {
                 console.log('No index.json found or load failed', e);
