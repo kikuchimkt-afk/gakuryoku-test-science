@@ -1,0 +1,1962 @@
+[
+  {
+    "id": "LOCAL006",
+    "grade": "1",
+    "unit": "植物の分類",
+    "keywords": "顕微鏡,胚珠,子房,受粉,裸子植物,被子植物,シダ植物,胞子のう,マツ,アブラナ",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-16T07:48:54.014Z",
+    "images": [
+      "LOCAL006_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL007",
+    "grade": "1",
+    "unit": "植物の生活と種類",
+    "keywords": "ツツジ,花のつくり,合弁花,離弁花,ゼニゴケ,胞子,コケ植物,受粉,胚珠,子房",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-16T08:05:17.063Z",
+    "images": [
+      "LOCAL007_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL008",
+    "grade": "1",
+    "unit": "植物の体のつくりと分類",
+    "keywords": "種子植物,裸子植物,被子植物,胚珠,子房,シダ植物,コケ植物,胞子,りん片,仮根",
+    "year": "2022",
+    "month": "5",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-16T08:06:05.181Z",
+    "images": [
+      "LOCAL008_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL009",
+    "grade": "1",
+    "unit": "植物の生活となかま",
+    "keywords": "アブラナ,マツ,被子植物,裸子植物,子房,胚珠,胞子のう,シダ植物,コケ植物,イヌワラビ",
+    "year": "2022",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-16T08:08:31.253Z",
+    "images": [
+      "LOCAL009_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL010",
+    "grade": "1",
+    "unit": "身近な生物の観察",
+    "keywords": "植物の分布,日当たり,土のしめりけ,タンポポ,ルーペの使い方,スケッチ,観察,ドクダミ,カタバミ",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "2",
+    "createdAt": "2026-01-16T08:09:35.900Z",
+    "images": [
+      "LOCAL010_problem_1.png",
+      "LOCAL010_problem_2.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL011",
+    "grade": "1",
+    "unit": "植物の分類",
+    "keywords": "顕微鏡,レボルバー,対物レンズ,マツ,裸子植物,胚珠,種子,ゼニゴケ,コケ植物,仮根",
+    "year": "2023",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-16T08:10:23.502Z",
+    "images": [
+      "LOCAL011_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL012",
+    "grade": "1",
+    "unit": "植物の生活となかま",
+    "keywords": "顕微鏡,アブラナ,マツ,胚珠,子房,種子,果実,スギゴケ,イヌワラビ,胞子のう",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-16T08:12:06.066Z",
+    "images": [
+      "LOCAL012_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL013",
+    "grade": "1",
+    "unit": "動物の分類",
+    "keywords": "脊椎動物,無脊椎動物,卵生,胎生,軟体動物,節足動物,外套膜,外骨格,両生類,爬虫類",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T05:57:41.225Z",
+    "images": [
+      "LOCAL013_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL013_explanation_1.png"
+    ],
+    "answerImage": "LOCAL013_answer.png"
+  },
+  {
+    "id": "LOCAL014",
+    "grade": "3",
+    "unit": "生命の連続性",
+    "keywords": "遺伝,メンデルの法則,顕性形質,潜性形質,対立形質,減数分裂,遺伝子,分離の法則,純系,自家受粉",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T05:59:16.936Z",
+    "images": [
+      "LOCAL014_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL014_explanation_1.png"
+    ],
+    "answerImage": "LOCAL014_answer.png"
+  },
+  {
+    "id": "LOCAL015",
+    "grade": "1",
+    "unit": "大地の変化",
+    "keywords": "地震,マグニチュード,震度,初期微動,主要動,震源,プレート,P波,S波,初期微動継続時間",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:00:28.710Z",
+    "images": [
+      "LOCAL015_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL015_explanation_1.png"
+    ],
+    "answerImage": "LOCAL015_answer.png"
+  },
+  {
+    "id": "LOCAL016",
+    "grade": "3",
+    "unit": "地球と宇宙",
+    "keywords": "透明半球,日周運動,自転,公転,夏至,星座,地軸,日の出,公転軌道,南中",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:01:10.614Z",
+    "images": [
+      "LOCAL016_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL016_explanation_1.png"
+    ],
+    "answerImage": "LOCAL016_answer.png"
+  },
+  {
+    "id": "LOCAL017",
+    "grade": "1",
+    "unit": "水溶液の性質",
+    "keywords": "溶質,溶媒,水溶液,質量パーセント濃度,溶解度,溶解度曲線,再結晶,ろ過,硝酸カリウム,ミョウバン",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:01:42.527Z",
+    "images": [
+      "LOCAL017_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL017_explanation_1.png"
+    ],
+    "answerImage": "LOCAL017_answer.png"
+  },
+  {
+    "id": "LOCAL018",
+    "grade": "3",
+    "unit": "化学変化とイオン",
+    "keywords": "塩酸,水酸化ナトリウム,中和,BTB溶液,イオン,水酸化物イオン,塩化物イオン,化学反応式,塩,水溶液",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:02:17.617Z",
+    "images": [
+      "LOCAL018_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL018_explanation_1.png"
+    ],
+    "answerImage": "LOCAL018_answer.png"
+  },
+  {
+    "id": "LOCAL019",
+    "grade": "1",
+    "unit": "光・音・力の性質",
+    "keywords": "入射角,屈折角,凸レンズ,焦点距離,実像,モノコード,振動数,振幅,音の波形,オシロスコープ",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:02:55.673Z",
+    "images": [
+      "LOCAL019_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL019_explanation_1.png"
+    ],
+    "answerImage": "LOCAL019_answer.png"
+  },
+  {
+    "id": "LOCAL020",
+    "grade": "3",
+    "unit": "仕事とエネルギー",
+    "keywords": "エネルギーの変換,仕事,電力量,LED電球,白熱電球,消費電力,熱エネルギー,ジュール,手回し発電機,効率",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:03:30.030Z",
+    "images": [
+      "LOCAL020_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL020_explanation_1.png"
+    ],
+    "answerImage": "LOCAL020_answer.png"
+  },
+  {
+    "id": "LOCAL021",
+    "grade": "1",
+    "unit": "植物の分類",
+    "keywords": "裸子植物,被子植物,単子葉類,双子葉類,離弁花類,合弁花類,主根と側根,網状脈,平行脈,胞子",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:04:40.735Z",
+    "images": [
+      "LOCAL021_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL021_explanation_1.png"
+    ],
+    "answerImage": "LOCAL021_answer.png"
+  },
+  {
+    "id": "LOCAL022",
+    "grade": "1",
+    "unit": "動物の分類",
+    "keywords": "脊椎動物,無脊椎動物,節足動物,軟体動物,胎生,卵生,外骨格,昆虫類,甲殻類,呼吸",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:05:10.471Z",
+    "images": [
+      "LOCAL022_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL022_explanation_1.png"
+    ],
+    "answerImage": "LOCAL022_answer.png"
+  },
+  {
+    "id": "LOCAL023",
+    "grade": "2",
+    "unit": "植物のからだのつくりとはたらき",
+    "keywords": "光合成,呼吸,蒸散,気孔,BTB溶液,二酸化炭素,対照実験,オオカナダモ,孔辺細胞,葉のつくり",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:05:54.666Z",
+    "images": [
+      "LOCAL023_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL023_explanation_1.png"
+    ],
+    "answerImage": "LOCAL023_answer.png"
+  },
+  {
+    "id": "LOCAL024",
+    "grade": "2",
+    "unit": "動物のからだのつくりとはたらき",
+    "keywords": "呼吸運動,横隔膜,肺胞,気体交換,アンモニア,肝臓,腎臓,尿素,排出,毛細血管",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:06:30.918Z",
+    "images": [
+      "LOCAL024_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL024_explanation_1.png"
+    ],
+    "answerImage": "LOCAL024_answer.png"
+  },
+  {
+    "id": "LOCAL025",
+    "grade": "1",
+    "unit": "身のまわりの物質",
+    "keywords": "二酸化炭素,酸素,水素,アンモニア,気体の性質,気体の発生方法,気体の集め方,アンモニアの噴水,フェノールフタレイン溶液,アルカリ性",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:07:12.083Z",
+    "images": [
+      "LOCAL025_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL025_explanation_1.png",
+      "LOCAL025_explanation_2.png"
+    ],
+    "answerImage": "LOCAL025_answer.png"
+  },
+  {
+    "id": "LOCAL026",
+    "grade": "1",
+    "unit": "身のまわりの物質",
+    "keywords": "状態変化,融点,沸点,蒸留,密度,質量,体積,粒子,混合物,エタノール",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:07:48.010Z",
+    "images": [
+      "LOCAL026_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL026_explanation_1.png"
+    ],
+    "answerImage": "LOCAL026_answer.png"
+  },
+  {
+    "id": "LOCAL027",
+    "grade": "2",
+    "unit": "化学変化",
+    "keywords": "炭酸水素ナトリウム,熱分解,二酸化炭素,水,炭酸ナトリウム,石灰水,塩化コバルト紙,フェノールフタレイン溶液,化学反応式,化学変化",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:08:18.436Z",
+    "images": [
+      "LOCAL027_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL027_explanation_1.png"
+    ],
+    "answerImage": "LOCAL027_answer.png"
+  },
+  {
+    "id": "LOCAL028",
+    "grade": "2",
+    "unit": "電流の正体",
+    "keywords": "静電気,摩擦電気,放電,真空放電,クルックス管,電子,陰極線,放射線,放射能,X線",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:08:59.859Z",
+    "images": [
+      "LOCAL028_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL028_explanation_1.png"
+    ],
+    "answerImage": "LOCAL028_answer.png"
+  },
+  {
+    "id": "LOCAL029",
+    "grade": "2",
+    "unit": "気象とその変化",
+    "keywords": "低気圧,等圧線,上昇気流,前線,寒冷前線,温暖前線,積乱雲,乱層雲,偏西風,温帯低気圧",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:09:32.237Z",
+    "images": [
+      "LOCAL029_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL029_explanation_1.png"
+    ],
+    "answerImage": "LOCAL029_answer.png"
+  },
+  {
+    "id": "LOCAL032",
+    "grade": "1",
+    "unit": "植物の分類",
+    "keywords": "裸子植物,被子植物,単子葉類,双子葉類,胚珠,子房,ひげ根,主根,胞子,葉脈",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "2",
+    "createdAt": "2026-01-22T06:14:44.980Z",
+    "images": [
+      "LOCAL032_problem_1.png",
+      "LOCAL032_problem_2.png"
+    ],
+    "explanationImages": [
+      "LOCAL032_explanation_1.png"
+    ],
+    "answerImage": "LOCAL032_answer.png"
+  },
+  {
+    "id": "LOCAL033",
+    "grade": "1",
+    "unit": "水溶液の性質",
+    "keywords": "溶質,溶媒,水溶液,質量パーセント濃度,粒子モデル,飽和水溶液,溶解度,溶解度曲線,再結晶,ろ過",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "2",
+    "createdAt": "2026-01-22T06:16:33.079Z",
+    "images": [
+      "LOCAL033_problem_1.png",
+      "LOCAL033_problem_2.png"
+    ],
+    "explanationImages": [
+      "LOCAL033_explanation_1.png"
+    ],
+    "answerImage": "LOCAL033_answer.png"
+  },
+  {
+    "id": "LOCAL034",
+    "grade": "1",
+    "unit": "身のまわりの物質",
+    "keywords": "エタノール,蒸留,沸点,状態変化,混合物,沸騰石,枝つきフラスコ,体積,質量,沸騰",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:17:22.618Z",
+    "images": [
+      "LOCAL034_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL034_explanation_1.png"
+    ],
+    "answerImage": "LOCAL034_answer.png"
+  },
+  {
+    "id": "LOCAL035",
+    "grade": "1",
+    "unit": "身のまわりの物質",
+    "keywords": "酸素,水素,二酸化炭素,アンモニア,窒素,気体の性質,水溶性,密度,気体の発生,リトマス紙",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "2",
+    "createdAt": "2026-01-22T06:18:08.574Z",
+    "images": [
+      "LOCAL035_problem_1.png",
+      "LOCAL035_problem_2.png"
+    ],
+    "explanationImages": [
+      "LOCAL035_explanation_1.png"
+    ],
+    "answerImage": "LOCAL035_answer.png"
+  },
+  {
+    "id": "LOCAL036",
+    "grade": "1",
+    "unit": "身の回りの物質",
+    "keywords": "蒸留,沸点,状態変化,混合物,エタノール,沸騰石,粒子,体積,枝つきフラスコ,質量",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:18:49.090Z",
+    "images": [
+      "LOCAL036_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL036_explanation_1.png"
+    ],
+    "answerImage": "LOCAL036_answer.png"
+  },
+  {
+    "id": "LOCAL037",
+    "grade": "1",
+    "unit": "音の性質",
+    "keywords": "音の伝わり方,振動,真空,音の速さ,モノコード,オシロスコープ,振幅,振動数,Hz,波形",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:19:42.396Z",
+    "images": [
+      "LOCAL037_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL037_explanation_1.png"
+    ],
+    "answerImage": "LOCAL037_answer.png"
+  },
+  {
+    "id": "LOCAL038",
+    "grade": "1",
+    "unit": "大地の変化",
+    "keywords": "マグニチュード,震央,震源,P波,S波,主要動,初期微動,初期微動継続時間,大陸プレート,海洋プレート",
+    "year": "2025",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T06:20:21.649Z",
+    "images": [
+      "LOCAL038_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL038_explanation_1.png"
+    ],
+    "answerImage": "LOCAL038_answer.png"
+  },
+  {
+    "id": "LOCAL040",
+    "grade": "1",
+    "unit": "植物の生活と種類",
+    "keywords": "ツツジ,ゼニゴケ,花のつくり,めしべ,おしべ,子房,合弁花,離弁花,胞子,コケ植物",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T07:54:14.666Z",
+    "images": [
+      "LOCAL040_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL041",
+    "grade": "1",
+    "unit": "植物の分類",
+    "keywords": "ひげ根,主根,側根,被子植物,単子葉類,双子葉類,子葉,葉脈,平行脈,網状脈",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T07:57:13.715Z",
+    "images": [
+      "LOCAL041_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL042",
+    "grade": "1",
+    "unit": "身近な生物の観察と分類",
+    "keywords": "顕微鏡,対物レンズ,レボルバー,プレパラート,マツ,雌花,りん片,種子,ゼニゴケ,仮根",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T07:57:40.771Z",
+    "images": [
+      "LOCAL042_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL043",
+    "grade": "1",
+    "unit": "植物の分類",
+    "keywords": "種子植物,裸子植物,被子植物,シダ植物,コケ植物,胚珠,子房,胞子,マツ,アブラナ",
+    "year": "2022",
+    "month": "5",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T07:58:25.397Z",
+    "images": [
+      "LOCAL043_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL044",
+    "grade": "1",
+    "unit": "身のまわりの生物の観察",
+    "keywords": "分布調査,タンポポ,ルーペの使い方,スケッチのしかた,日当たり,土のしめりけ,環境,花のつくり,身のまわりの生物,観察",
+    "year": "",
+    "month": "5",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "2",
+    "createdAt": "2026-01-22T08:00:04.405Z",
+    "images": [
+      "LOCAL044_problem_1.png",
+      "LOCAL044_problem_2.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL045",
+    "grade": "1",
+    "unit": "植物の生活と種類",
+    "keywords": "顕微鏡,受粉,胚珠,子房,被子植物,裸子植物,コケ植物,シダ植物,胞子のう,種子",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:00:53.403Z",
+    "images": [
+      "LOCAL045_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL046",
+    "grade": "1",
+    "unit": "植物の仲間",
+    "keywords": "マツ,アブラナ,裸子植物,被子植物,シダ植物,コケ植物,胚珠,子房,受粉,種子",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:01:44.518Z",
+    "images": [
+      "LOCAL046_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL047",
+    "grade": "1",
+    "unit": "植物の分類",
+    "keywords": "被子植物,裸子植物,単子葉類,双子葉類,シダ植物,コケ植物,胞子,維管束,葉脈,胚珠",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:05:39.309Z",
+    "images": [
+      "LOCAL047_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL048",
+    "grade": "1",
+    "unit": "植物のからだのつくりと分類",
+    "keywords": "ひげ根,主根,側根,単子葉類,双子葉類,平行脈,網目状,根毛,表面積,被子植物",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:06:17.606Z",
+    "images": [
+      "LOCAL048_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL049",
+    "grade": "1",
+    "unit": "植物の分類",
+    "keywords": "種子植物,被子植物,裸子植物,双子葉類,単子葉類,シダ植物,コケ植物,胚珠,子房,維管束",
+    "year": "2022",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:06:52.483Z",
+    "images": [
+      "LOCAL049_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL050",
+    "grade": "1",
+    "unit": "植物の分類",
+    "keywords": "シダ植物,コケ植物,裸子植物,被子植物,単子葉類,双子葉類,胚珠,子房,維管束,合弁花",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:08:52.194Z",
+    "images": [
+      "LOCAL050_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL051",
+    "grade": "1",
+    "unit": "動物のなかま分け",
+    "keywords": "脊椎動物,無脊椎動物,胎生,両生類,軟体動物,節足動物,呼吸,魚類,爬虫類,哺乳類",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:13:03.829Z",
+    "images": [
+      "LOCAL051_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL052",
+    "grade": "1",
+    "unit": "植物の分類",
+    "keywords": "種子植物,被子植物,裸子植物,単子葉類,双子葉類,子房,胚珠,維管束,シダ植物,コケ植物",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:16:16.694Z",
+    "images": [
+      "LOCAL052_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL053",
+    "grade": "1",
+    "unit": "植物の分類",
+    "keywords": "種子植物,被子植物,裸子植物,単子葉類,双子葉類,シダ植物,コケ植物,維管束,胚珠,胞子",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:17:29.555Z",
+    "images": [
+      "LOCAL053_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL054",
+    "grade": "1",
+    "unit": "植物の分類",
+    "keywords": "種子植物,被子植物,裸子植物,単子葉類,双子葉類,合弁花類,離弁花類,胞子,胚珠,子房",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:36:12.556Z",
+    "images": [
+      "LOCAL054_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL055",
+    "grade": "1",
+    "unit": "植物の分類",
+    "keywords": "種子植物,被子植物,裸子植物,シダ植物,コケ植物,双子葉類,単子葉類,維管束,主根と側根,ひげ根",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:36:42.804Z",
+    "images": [
+      "LOCAL055_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL056",
+    "grade": "1",
+    "unit": "動物のなかまの分類",
+    "keywords": "脊椎動物,無脊椎動物,胎生,卵生,節足動物,軟体動物,外骨格,哺乳類,爬虫類,両生類",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:44:09.071Z",
+    "images": [
+      "LOCAL056_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL057",
+    "grade": "1",
+    "unit": "動物の分類と生活",
+    "keywords": "脊椎動物,無脊椎動物,哺乳類,胎生,草食動物,肉食動物,節足動物,軟体動物,外とう膜,外骨格",
+    "year": "2022",
+    "month": "1",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:46:39.025Z",
+    "images": [
+      "LOCAL057_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL058",
+    "grade": "1",
+    "unit": "動物の分類",
+    "keywords": "脊椎動物,無脊椎動物,胎生,卵生,節足動物,軟体動物,外骨格,両生類,爬虫類,哺乳類",
+    "year": "2022",
+    "month": "7",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:48:58.883Z",
+    "images": [
+      "LOCAL058_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL059",
+    "grade": "1",
+    "unit": "動物のなかま",
+    "keywords": "脊椎動物,無脊椎動物,胎生,卵生,節足動物,軟体動物,外とう膜,外骨格,肺呼吸,エラ呼吸",
+    "year": "",
+    "month": "7",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:49:48.419Z",
+    "images": [
+      "LOCAL059_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL060",
+    "grade": "1",
+    "unit": "動物の分類",
+    "keywords": "脊椎動物,無脊椎動物,胎生,卵生,哺乳類,両生類,爬虫類,魚類,節足動物,軟体動物",
+    "year": "",
+    "month": "7",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:50:40.929Z",
+    "images": [
+      "LOCAL060_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL061",
+    "grade": "1",
+    "unit": "動物の分類",
+    "keywords": "脊椎動物,無脊椎動物,節足動物,軟体動物,外骨格,両生類,爬虫類,哺乳類,胎生,視野",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:51:27.837Z",
+    "images": [
+      "LOCAL061_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL062",
+    "grade": "1",
+    "unit": "生物のなかま",
+    "keywords": "植物の分類,脊椎動物,無脊椎動物,種子植物,被子植物,裸子植物,単子葉類,双子葉類,軟体動物,胎生",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:52:50.384Z",
+    "images": [
+      "LOCAL062_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL063",
+    "grade": "1",
+    "unit": "動物の分類",
+    "keywords": "脊椎動物,無脊椎動物,節足動物,軟体動物,外骨格,外とう膜,胎生,卵生,爬虫類,両生類",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:57:56.431Z",
+    "images": [
+      "LOCAL063_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL064",
+    "grade": "1",
+    "unit": "動物のなかまと分類",
+    "keywords": "脊椎動物,無脊椎動物,節足動物,軟体動物,哺乳類,爬虫類,両生類,魚類,卵生,胎生",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:58:24.091Z",
+    "images": [
+      "LOCAL064_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL065",
+    "grade": "1",
+    "unit": "動物の分類",
+    "keywords": "脊椎動物,無脊椎動物,卵生,胎生,節足動物,軟体動物,外骨格,外とう膜,魚類,両生類",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T08:59:16.042Z",
+    "images": [
+      "LOCAL065_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL066",
+    "grade": "1",
+    "unit": "動物の分類",
+    "keywords": "脊椎動物,無脊椎動物,節足動物,軟体動物,外骨格,外とう膜,哺乳類,爬虫類,両生類,胎生",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:00:13.523Z",
+    "images": [
+      "LOCAL066_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL067",
+    "grade": "1",
+    "unit": "動物の仲間と分類",
+    "keywords": "脊椎動物,無脊椎動物,胎生,卵生,節足動物,軟体動物,外とう膜,両生類,は虫類,肺呼吸",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:00:52.605Z",
+    "images": [
+      "LOCAL067_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL068",
+    "grade": "1",
+    "unit": "動物の分類",
+    "keywords": "脊椎動物,無脊椎動物,節足動物,軟体動物,卵生,胎生,肺呼吸,えら呼吸,外套膜,外骨格",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:01:25.777Z",
+    "images": [
+      "LOCAL068_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL069",
+    "grade": "1",
+    "unit": "動物の分類",
+    "keywords": "セキツイ動物,無セキツイ動物,軟体動物,節足動物,外套膜,胎生,卵生,肺呼吸,えら呼吸,皮膚呼吸",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:03:02.511Z",
+    "images": [
+      "LOCAL069_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL070",
+    "grade": "1",
+    "unit": "身のまわりの物質",
+    "keywords": "密度,質量,体積,溶解度,飽和水溶液,再結晶,状態変化,融点,沸点,粒子",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:03:48.658Z",
+    "images": [
+      "LOCAL070_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL071",
+    "grade": "1",
+    "unit": "身のまわりの物質",
+    "keywords": "気体の性質,二酸化炭素,水素,酸素,アンモニア,水上置換法,上方置換法,気体の発生,石灰石,二酸化マンガン",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:08:03.866Z",
+    "images": [
+      "LOCAL071_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL072",
+    "grade": "1",
+    "unit": "身のまわりの物質",
+    "keywords": "酸素,二酸化炭素,水素,アンモニア,気体の発生,気体の性質,上方置換法,水上置換法,噴水の実験,BTB溶液",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:08:59.263Z",
+    "images": [
+      "LOCAL072_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL073",
+    "grade": "1",
+    "unit": "身のまわりの物質",
+    "keywords": "酸素,水素,アンモニア,二酸化炭素,気体の性質,気体の集め方,上方置換法,水上置換法,リトマス紙,密度,溶解度",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:09:25.150Z",
+    "images": [
+      "LOCAL073_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL074",
+    "grade": "1",
+    "unit": "身のまわりの物質",
+    "keywords": "酸素,二酸化炭素,水素,アンモニア,気体の性質,気体の発生,水上置換法,石灰石,二酸化マンガン,BTB液",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:10:33.686Z",
+    "images": [
+      "LOCAL074_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL075",
+    "grade": "1",
+    "unit": "身のまわりの物質",
+    "keywords": "無機物,有機物,融点,沸点,状態変化,粒子,アンモニア,上方置換法,フェノールフタレイン,アルカリ性",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:11:29.391Z",
+    "images": [
+      "LOCAL075_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL076",
+    "grade": "1",
+    "unit": "身のまわりの物質",
+    "keywords": "気体の性質,酸素,水素,二酸化炭素,アンモニア,窒素,気体の集め方,助燃性,リトマス紙,気体の発生方法",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:11:57.737Z",
+    "images": [
+      "LOCAL076_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL077",
+    "grade": "1",
+    "unit": "身のまわりの物質（気体の性質）",
+    "keywords": "酸素,水素,二酸化炭素,アンモニア,水上置換法,上方置換法,リトマス紙,気体の集め方,アルカリ性,気体の発生",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:12:11.645Z",
+    "images": [
+      "LOCAL077_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL078",
+    "grade": "1",
+    "unit": "気体の性質",
+    "keywords": "酸素,水素,二酸化炭素,アンモニア,窒素,水上置換法,上方置換法,下方置換法,噴水実験,フェノールフタレイン溶液",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:12:39.913Z",
+    "images": [
+      "LOCAL078_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL079",
+    "grade": "1",
+    "unit": "身のまわりの物質（気体の性質）",
+    "keywords": "酸素,二酸化炭素,水素,アンモニア,水上置換法,上方置換法,下方置換法,BTB溶液,気体の発生,気体の性質",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:13:09.206Z",
+    "images": [
+      "LOCAL079_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL080",
+    "grade": "1",
+    "unit": "身のまわりの物質",
+    "keywords": "有機物,状態変化,密度,気体の性質,石灰水,二酸化炭素,アンモニア,水素,置換法,質量",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:13:32.440Z",
+    "images": [
+      "LOCAL080_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL081",
+    "grade": "1",
+    "unit": "身のまわりの物質",
+    "keywords": "気体の性質,酸素,水素,二酸化炭素,アンモニア,水上置換法,上方置換法,リトマス紙,アルカリ性,気体の発生",
+    "year": "2024",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:14:14.642Z",
+    "images": [
+      "LOCAL081_problem_1.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL082",
+    "grade": "1",
+    "unit": "身のまわりの物質",
+    "keywords": "酸素,二酸化炭素,アンモニア,水素,気体の性質,リトマス紙,フェノールフタレイン溶液,気体の発生方法,水への溶けやすさ",
+    "year": "",
+    "month": "",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:14:55.691Z",
+    "images": [
+      "LOCAL082_problem_1.png",
+      "LOCAL082_problem_2.png"
+    ],
+    "explanationImages": [],
+    "answerImage": null
+  },
+  {
+    "id": "LOCAL083",
+    "grade": "3",
+    "unit": "生命の連続性",
+    "keywords": "花粉管,受精,精細胞,卵細胞,減数分裂,有性生殖,柱頭,胚珠,生殖細胞,ホウセンカ",
+    "year": "2025",
+    "month": "1",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T17:50:03.197Z",
+    "images": [
+      "LOCAL083_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL083_explanation_1.png"
+    ],
+    "answerImage": "LOCAL083_answer.png"
+  },
+  {
+    "id": "LOCAL085",
+    "grade": "2",
+    "unit": "電流の性質",
+    "keywords": "電流,電圧,電気抵抗,オームの法則,直列回路,並列回路,電流計,回路,抵抗器",
+    "year": "2025",
+    "month": "1",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:27:27.044Z",
+    "images": [
+      "LOCAL085_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL085_explanation_1.png",
+      "LOCAL085_explanation_2.png"
+    ],
+    "answerImage": "LOCAL085_answer.png"
+  },
+  {
+    "id": "LOCAL086",
+    "grade": "3",
+    "unit": "化学変化とイオン",
+    "keywords": "ダニエル電池,化学電池,イオン,亜鉛板,銅板,硫酸亜鉛水溶液,硫酸銅水溶液,電子,化学反応式,セロハン",
+    "year": "2025",
+    "month": "1",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T17:51:48.170Z",
+    "images": [
+      "LOCAL086_problem_1.png",
+      "LOCAL086_problem_2.png"
+    ],
+    "explanationImages": [],
+    "answerImage": "LOCAL086_answer.png"
+  },
+  {
+    "id": "LOCAL087",
+    "grade": "2",
+    "unit": "気象とその変化",
+    "keywords": "飽和水蒸気量,露点,湿度,水蒸気,乾湿計,凝結,水滴,気温,気象",
+    "year": "",
+    "month": "1",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "2",
+    "createdAt": "2026-01-22T17:52:10.202Z",
+    "images": [
+      "LOCAL087_problem_1.png",
+      "LOCAL087_problem_2.png"
+    ],
+    "explanationImages": [],
+    "answerImage": "LOCAL087_answer.png"
+  },
+  {
+    "id": "LOCAL088",
+    "grade": "1",
+    "unit": "身のまわりの物質",
+    "keywords": "溶解度,溶解度曲線,再結晶,飽和水溶液,質量パーセント濃度,ろ過,結晶,硝酸カリウム,塩化ナトリウム,ミョウバン",
+    "year": "2025",
+    "month": "1",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "2",
+    "createdAt": "2026-01-22T17:50:32.163Z",
+    "images": [
+      "LOCAL088_problem_1.png",
+      "LOCAL088_problem_2.png"
+    ],
+    "explanationImages": [],
+    "answerImage": "LOCAL088_answer.png"
+  },
+  {
+    "id": "LOCAL089",
+    "grade": "1",
+    "unit": "動物の分類",
+    "keywords": "脊椎動物,無脊椎動物,卵生,胎生,呼吸,両生類,節足動物,軟体動物,気門,えら",
+    "year": "2025",
+    "month": "1",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T17:52:31.254Z",
+    "images": [
+      "LOCAL089_problem_1.png",
+      "LOCAL089_problem_2.png"
+    ],
+    "explanationImages": [],
+    "answerImage": "LOCAL089_answer.png"
+  },
+  {
+    "id": "LOCAL090",
+    "grade": "3",
+    "unit": "運動とエネルギー",
+    "keywords": "仕事,仕事率,仕事の原理,滑車,斜面,てこ,ジュール,ワット,動滑車,定滑車",
+    "year": "2025",
+    "month": "1",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "2",
+    "createdAt": "2026-01-22T17:52:59.579Z",
+    "images": [
+      "LOCAL090_problem_1.png",
+      "LOCAL090_problem_2.png"
+    ],
+    "explanationImages": [
+      "LOCAL090_explanation_1.png"
+    ],
+    "answerImage": "LOCAL090_answer.png"
+  },
+  {
+    "id": "LOCAL091",
+    "grade": "3",
+    "unit": "地球と宇宙",
+    "keywords": "太陽,黒点,自転,恒星,太陽系,地球型惑星,木星型惑星,天体望遠鏡,投影板,平均密度",
+    "year": "2025",
+    "month": "1",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T09:40:30.017Z",
+    "images": [
+      "LOCAL091_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL091_explanation_1.png"
+    ],
+    "answerImage": "LOCAL091_answer.png"
+  },
+  {
+    "id": "LOCAL092",
+    "grade": "1",
+    "unit": "植物の分類",
+    "keywords": "種子植物,被子植物,裸子植物,単子葉類,双子葉類,離弁花類,合弁花類,シダ植物,コケ植物,胞子",
+    "year": "2025",
+    "month": "12",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T16:52:32.778Z",
+    "images": [
+      "LOCAL092_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL092_explanation_1.png"
+    ],
+    "answerImage": "LOCAL092_answer.png"
+  },
+  {
+    "id": "LOCAL093",
+    "grade": "2",
+    "unit": "植物のからだのつくりとはたらき",
+    "keywords": "光合成,呼吸,二酸化炭素,石灰水,ヨウ素液,デンプン,気孔,対照実験,師管,道管",
+    "year": "2025",
+    "month": "12",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T16:56:27.277Z",
+    "images": [
+      "LOCAL093_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL093_explanation_1.png"
+    ],
+    "answerImage": "LOCAL093_answer.png"
+  },
+  {
+    "id": "LOCAL094",
+    "grade": "1",
+    "unit": "大地の変化",
+    "keywords": "火成岩,斑晶,斑状組織,安山岩,地層,柱状図,示準化石,アンモナイト,石灰岩,二酸化炭素",
+    "year": "2025",
+    "month": "12",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T16:57:36.089Z",
+    "images": [
+      "LOCAL094_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL094_explanation_1.png"
+    ],
+    "answerImage": "LOCAL094_answer.png"
+  },
+  {
+    "id": "LOCAL095",
+    "grade": "2",
+    "unit": "天気の変化",
+    "keywords": "雲のでき方,露点,飽和水蒸気量,気圧,断熱膨張,凝結核,水蒸気,気温,湿度,上昇気流",
+    "year": "2025",
+    "month": "12",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T17:03:37.247Z",
+    "images": [
+      "LOCAL095_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL095_explanation_1.png"
+    ],
+    "answerImage": "LOCAL095_answer.png"
+  },
+  {
+    "id": "LOCAL096",
+    "grade": "3",
+    "unit": "化学変化とイオン",
+    "keywords": "アルカリ性,酸性,pH,指示薬,リトマス紙,水酸化ナトリウム,塩酸,イオンの移動,水酸化物イオン,水素イオン",
+    "year": "2025",
+    "month": "12",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T17:04:22.209Z",
+    "images": [
+      "LOCAL096_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL096_explanation_1.png"
+    ],
+    "answerImage": "LOCAL096_answer.png"
+  },
+  {
+    "id": "LOCAL097",
+    "grade": "3",
+    "unit": "化学変化とイオン",
+    "keywords": "イオンへのなりやすさ,ダニエル電池,化学エネルギー,硫酸銅水溶液,硫酸亜鉛水溶液,銅板,亜鉛板,マグネシウム,＋極,セロハン",
+    "year": "2025",
+    "month": "12",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T17:05:09.757Z",
+    "images": [
+      "LOCAL097_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL097_explanation_1.png"
+    ],
+    "answerImage": "LOCAL097_answer.png"
+  },
+  {
+    "id": "LOCAL098",
+    "grade": "2",
+    "unit": "電流とそのはたらき",
+    "keywords": "抵抗,電圧,電流,オームの法則,直列回路,並列回路,電力,電力量,交流,直流",
+    "year": "2025",
+    "month": "12",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T17:05:55.780Z",
+    "images": [
+      "LOCAL098_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL098_explanation_1.png"
+    ],
+    "answerImage": "LOCAL098_answer.png"
+  },
+  {
+    "id": "LOCAL099",
+    "grade": "3",
+    "unit": "運動とエネルギー",
+    "keywords": "振り子,位置エネルギー,運動エネルギー,力学的エネルギー,力学的エネルギーの保存,ストロボスコープ,速さ,最下点",
+    "year": "2025",
+    "month": "12",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "2",
+    "createdAt": "2026-01-22T17:07:51.114Z",
+    "images": [
+      "LOCAL099_problem_1.png",
+      "LOCAL099_problem_2.png"
+    ],
+    "explanationImages": [
+      "LOCAL099_explanation_1.png"
+    ],
+    "answerImage": "LOCAL099_answer.png"
+  },
+  {
+    "id": "LOCAL100",
+    "grade": "2",
+    "unit": "動物の生活と生物の進化",
+    "keywords": "感覚器官,反射,刺激,反応,中枢神経,末梢神経,感覚神経,運動神経,筋肉,骨格",
+    "year": "2025",
+    "month": "12",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T17:09:19.134Z",
+    "images": [
+      "LOCAL100_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL100_explanation_1.png"
+    ],
+    "answerImage": "LOCAL100_answer.png"
+  },
+  {
+    "id": "LOCAL101",
+    "grade": "2",
+    "unit": "植物の生活と体のつくり",
+    "keywords": "光合成,ふ入りの葉,ヨウ素液,エタノール,脱色,二酸化炭素,酸素,気孔,維管束,師管",
+    "year": "2025",
+    "month": "12",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T17:10:02.634Z",
+    "images": [
+      "LOCAL101_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL101_explanation_1.png"
+    ],
+    "answerImage": "LOCAL101_answer.png"
+  },
+  {
+    "id": "LOCAL102",
+    "grade": "1",
+    "unit": "大地の変化",
+    "keywords": "マグニチュード,震度,P波,S波,震央,震源,活断層,初期微動,主要動,初期微動継続時間",
+    "year": "2025",
+    "month": "12",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T17:11:56.331Z",
+    "images": [
+      "LOCAL102_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL102_explanation_1.png"
+    ],
+    "answerImage": "LOCAL102_answer.png"
+  },
+  {
+    "id": "LOCAL103",
+    "grade": "1",
+    "unit": "大地の変化",
+    "keywords": "火山,マグマ,粘りけ,火成岩,火山岩,深成岩,等粒状組織,斑状組織,鉱物,火山灰",
+    "year": "2025",
+    "month": "12",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T17:12:46.284Z",
+    "images": [
+      "LOCAL103_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL103_explanation_1.png"
+    ],
+    "answerImage": "LOCAL103_answer.png"
+  },
+  {
+    "id": "LOCAL104",
+    "grade": "1",
+    "unit": "大地の変化",
+    "keywords": "柱状図,ボーリング調査,地層,示準化石,凝灰岩,石灰岩,堆積岩,等高線,標高,フズリナ",
+    "year": "2025",
+    "month": "12",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T17:14:30.460Z",
+    "images": [
+      "LOCAL104_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL104_explanation_1.png"
+    ],
+    "answerImage": "LOCAL104_answer.png"
+  },
+  {
+    "id": "LOCAL105",
+    "grade": "1",
+    "unit": "物質の姿と状態変化",
+    "keywords": "状態変化,エタノール,粒子,体積,密度,沸点,加熱曲線,質量,ろう,氷",
+    "year": "2025",
+    "month": "12",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T17:21:56.458Z",
+    "images": [
+      "LOCAL105_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL105_explanation_1.png"
+    ],
+    "answerImage": "LOCAL105_answer.png"
+  },
+  {
+    "id": "LOCAL106",
+    "grade": "2",
+    "unit": "化学変化と質量",
+    "keywords": "マグネシウム,酸化,燃焼,化学反応式,酸化マグネシウム,質量の比,酸素,加熱,化学変化,質量保存の法則",
+    "year": "2025",
+    "month": "12",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T17:23:49.742Z",
+    "images": [
+      "LOCAL106_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL106_explanation_1.png"
+    ],
+    "answerImage": "LOCAL106_answer.png"
+  },
+  {
+    "id": "LOCAL107",
+    "grade": "2",
+    "unit": "電流の性質",
+    "keywords": "電流計,電圧計,抵抗,オームの法則,直列回路,並列回路,電流,電圧,電気回路",
+    "year": "2025",
+    "month": "12",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T17:25:16.047Z",
+    "images": [
+      "LOCAL107_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL107_explanation_1.png"
+    ],
+    "answerImage": "LOCAL107_answer.png"
+  },
+  {
+    "id": "LOCAL108",
+    "grade": "2",
+    "unit": "天気の変化",
+    "keywords": "乾湿計,湿度,乾球,湿球,飽和水蒸気量,露点,水蒸気,気温,金属製のコップ",
+    "year": "2025",
+    "month": "12",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-22T17:26:08.731Z",
+    "images": [
+      "LOCAL108_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL108_explanation_1.png"
+    ],
+    "answerImage": "LOCAL108_answer.png"
+  },
+  {
+    "id": "LOCAL109",
+    "grade": "2",
+    "unit": "植物の生活と体のつくり",
+    "keywords": "光合成,呼吸,ヨウ素液,BTB溶液,デンプン,二酸化炭素,エタノール,オオカナダモ,ふ入りの葉,アルミニウムはく",
+    "year": "2025",
+    "month": "10",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-27T06:55:15.423Z",
+    "images": [
+      "LOCAL109_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL109_explanation_1.png"
+    ],
+    "answerImage": "LOCAL109_answer.png"
+  },
+  {
+    "id": "LOCAL110",
+    "grade": "2",
+    "unit": "植物の体のつくりと働き",
+    "keywords": "導管,維管束,蒸散,気孔,孔辺細胞,葉脈,道管,茎の断面,ワセリン,双子葉類",
+    "year": "2025",
+    "month": "10",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-27T06:56:52.588Z",
+    "images": [
+      "LOCAL110_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL110_explanation_1.png"
+    ],
+    "answerImage": "LOCAL110_answer.png"
+  },
+  {
+    "id": "LOCAL111",
+    "grade": "3",
+    "unit": "生命の連続性",
+    "keywords": "メンデル,エンドウ,形質,純系,遺伝子,対立形質,分離の法則,自家受粉,顕性形質,潜性形質",
+    "year": "",
+    "month": "10",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-27T06:57:39.772Z",
+    "images": [
+      "LOCAL111_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL111_explanation_1.png"
+    ],
+    "answerImage": "LOCAL111_answer.png"
+  },
+  {
+    "id": "LOCAL112",
+    "grade": "1",
+    "unit": "大地の変化",
+    "keywords": "マグマ,火成岩,火山岩,深成岩,堆積岩,地層,化石,フズリナ,地質年代,鉱物",
+    "year": "2025",
+    "month": "10",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-27T06:58:21.815Z",
+    "images": [
+      "LOCAL112_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL112_explanation_1.png"
+    ],
+    "answerImage": "LOCAL112_answer.png"
+  },
+  {
+    "id": "LOCAL113",
+    "grade": "1",
+    "unit": "大地の変化",
+    "keywords": "P波,S波,初期微動継続時間,震源からの距離,マグニチュード,震度,初期微動,主要動,緊急地震速報,地震の発生時刻",
+    "year": "2025",
+    "month": "10",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-27T06:59:15.631Z",
+    "images": [
+      "LOCAL113_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL113_explanation_1.png",
+      "LOCAL113_explanation_2.png"
+    ],
+    "answerImage": "LOCAL113_answer.png"
+  },
+  {
+    "id": "LOCAL114",
+    "grade": "2",
+    "unit": "化学変化",
+    "keywords": "水の電気分解,化学反応式,鉄粉と硫黄の反応,硫化鉄,酸化,単体,化合物,分子,化学変化と質量,定比例の法則",
+    "year": "2025",
+    "month": "10",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-27T06:59:52.440Z",
+    "images": [
+      "LOCAL114_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL114_explanation_1.png"
+    ],
+    "answerImage": "LOCAL114_answer.png"
+  },
+  {
+    "id": "LOCAL115",
+    "grade": "2",
+    "unit": "電流と磁界",
+    "keywords": "電流,磁界,コイル,方位磁針,U字形磁石,磁界から受ける力,フレミングの左手の法則,モーター,右ねじの法則",
+    "year": "2025",
+    "month": "10",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "2",
+    "createdAt": "2026-01-27T07:00:38.593Z",
+    "images": [
+      "LOCAL115_problem_1.png",
+      "LOCAL115_problem_2.png"
+    ],
+    "explanationImages": [
+      "LOCAL115_explanation_1.png"
+    ],
+    "answerImage": "LOCAL115_answer.png"
+  },
+  {
+    "id": "LOCAL116",
+    "grade": "3",
+    "unit": "物体の運動",
+    "keywords": "記録タイマー,記録テープ,台車,斜面,平均の速さ,等加速度直線運動,重力,分力,移動距離,速さの変化",
+    "year": "2025",
+    "month": "10",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-27T07:01:19.777Z",
+    "images": [
+      "LOCAL116_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL116_explanation_1.png"
+    ],
+    "answerImage": "LOCAL116_answer.png"
+  },
+  {
+    "id": "LOCAL117",
+    "grade": "3",
+    "unit": "地球と宇宙",
+    "keywords": "星の動き,日周運動,透明半球,太陽の動き,自転,日の出の時刻,方位,天体の動き",
+    "year": "2025",
+    "month": "10",
+    "testType": "学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "createdAt": "2026-01-27T07:01:53.891Z",
+    "images": [
+      "LOCAL117_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL117_explanation_1.png"
+    ],
+    "answerImage": "LOCAL117_answer.png"
+  }
+]
