@@ -10,6 +10,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <!-- pdf-lib を追加 -->
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"
+        integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"
+        integrity="sha384-cpW21h6RZv/phavutF+AuVYrr+dA8xD9zs6FwLpaCct6O9ctzYFfFr4dgmgccOTx"
+        crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+        integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+        crossorigin="anonymous"></script>
     <style>
         /* Interフォントを読み込み */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
@@ -53,9 +62,7 @@
             border-right: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        main {
-            /* Main content transparent/glass */
-        }
+
 
         section {
             background: rgba(255, 255, 255, 0.25) !important;
@@ -80,8 +87,8 @@
         /* 検索結果カードのホバーエフェクト */
         .result-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.95);
         }
 
         .result-card.selected {
@@ -234,7 +241,11 @@
         <!-- 2. 検索結果 (中央パネル) -->
         <main class="w-full md:w-1/2 xl:w-2/5 bg-gray-50 p-5 overflow-y-auto custom-scrollbar">
             <div class="flex justify-between items-center mb-6">
-                <h1 class="text-3xl font-bold text-gray-900">理科問題 検索データベース</h1>
+                <h1 class="text-3xl font-bold text-gray-900">
+                    理科問題 検索データベース
+                    <span
+                        class="ml-2 text-sm bg-gray-200 text-gray-700 px-2 py-1 rounded-md align-middle">Desk-Top</span>
+                </h1>
                 <a href="問題登録.html"
                     class="bg-green-600 text-white py-2 px-4 rounded-lg font-semibold shadow-md hover:bg-green-700 transition-colors text-sm">
                     ＋ 問題登録
@@ -5669,7 +5680,7 @@
                 const isLocal = doc.id.startsWith('LOCAL');
                 const isCollected = collectedProblemIds.has(doc.id);
                 const item = document.createElement('div');
-                item.className = `result-card bg-white p-4 rounded-lg border shadow-sm transition-all duration-200 cursor-pointer ${isCollected ? 'border-indigo-500 bg-indigo-50 ring-1 ring-indigo-500' : 'border-gray-200 hover:border-indigo-300'}`;
+                item.className = `result-card p-4 rounded-lg border shadow-sm transition-all duration-200 cursor-pointer ${isCollected ? 'border-indigo-500 bg-indigo-50 ring-1 ring-indigo-500' : 'border-white/40 hover:border-indigo-300'}`;
                 item.onclick = (e) => {
                     // チェックボックスのクリックはバブリングでここに来るが、
                     // カード自体のクリックで詳細表示したい場合と、チェックボックスで選択したい場合を分ける
@@ -5702,6 +5713,16 @@
                     ${doc.source_pdf ? `<p class="text-xs text-gray-500 mt-2 truncate">📄 ${doc.source_pdf}</p>` : ''}
                 `;
                 container.appendChild(item);
+
+                // KaTeXレンダリング
+                if (window.renderMathInElement) {
+                    renderMathInElement(item, {
+                        delimiters: [
+                            { left: "$$", right: "$$", display: true },
+                            { left: "$", right: "$", display: false }
+                        ]
+                    });
+                }
             });
 
             updateFloatingBar();
@@ -6000,6 +6021,7 @@
 
 
         // === 詳細表示 ===
+        // === 詳細表示 ===
         function viewDetails(docId, cardElement) {
             // ローカル問題かMOCK_DATAから検索
             let doc = MOCK_SCIENCE_DATA.find(d => d.id === docId);
@@ -6196,6 +6218,16 @@
                         </div>
                     </div>
                 `;
+            }
+
+            // KaTeXレンダリング (詳細ビュー)
+            if (window.renderMathInElement) {
+                renderMathInElement(detailViewer, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false }
+                    ]
+                });
             }
         }
 

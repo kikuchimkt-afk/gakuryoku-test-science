@@ -13,6 +13,48 @@
 
         body {
             font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            /* Physics Theme Background */
+            background-image: url('images/bg_physics.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        /* Drop Zone Glass Styling */
+        .drop-zone {
+            background: rgba(255, 255, 255, 0.3) !important;
+            border: 3px dashed rgba(100, 116, 139, 0.5);
+            /* slate-500/50 */
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone:hover {
+            background: rgba(255, 255, 255, 0.5) !important;
+            border-color: #6366f1;
+        }
+
+        /* Form Inputs Glass Styling */
+        input[type="text"],
+        select {
+            background: rgba(255, 255, 255, 0.5) !important;
+            border: 1px solid rgba(255, 255, 255, 0.4) !important;
+            backdrop-filter: blur(4px);
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            background: rgba(255, 255, 255, 0.8) !important;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
         }
 
         /* カスタムスクロールバー */
@@ -21,34 +63,23 @@
         }
 
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #c0c0c0;
+            background: rgba(156, 163, 175, 0.5);
             border-radius: 10px;
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #a0a0a0;
-        }
-
-        /* ドロップゾーンのスタイル */
-        .drop-zone {
-            border: 3px dashed #cbd5e1;
-            transition: all 0.3s ease;
-        }
-
-        .drop-zone:hover,
-        .drop-zone.dragover {
-            border-color: #6366f1;
-            background-color: #eef2ff;
+            background: rgba(156, 163, 175, 0.8);
         }
 
         .drop-zone.has-image {
             border-style: solid;
             border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1) !important;
         }
 
         /* 登録済み問題カードのスタイル */
@@ -64,7 +95,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -75,7 +107,7 @@
         .analyzing-spinner {
             width: 48px;
             height: 48px;
-            border: 4px solid #e5e7eb;
+            border: 4px solid rgba(229, 231, 235, 0.5);
             border-top-color: #6366f1;
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -97,11 +129,16 @@
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-3xl font-bold text-indigo-700">📝 理科問題 登録</h1>
             <div class="flex gap-4">
+                <button id="exportVercelBtn"
+                    class="bg-purple-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-purple-700 transition-colors shadow-sm flex items-center gap-2">
+                    Start Vercel Export
+                </button>
+
                 <button id="openSettingsBtn" class="text-2xl p-2 hover:bg-gray-200 rounded-full transition-colors"
                     title="設定を開く">
                     ⚙️
                 </button>
-                <a href="学力テスト理科検索.html"
+                <a href="index.html"
                     class="bg-gray-600 text-white py-2 px-4 rounded-lg font-semibold shadow-md hover:bg-gray-700 transition-colors">
                     🔍 検索ページへ
                 </a>
@@ -111,7 +148,7 @@
 
 
         <!-- メインコンテンツ -->
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <div class="glass-panel rounded-xl p-6 mb-8">
 
             <!-- スクリーンショット貼り付けエリア（問題） -->
             <div class="mb-6">
@@ -352,7 +389,7 @@
         </div>
 
         <!-- 登録済み問題一覧 -->
-        <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="glass-panel rounded-xl p-6">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold text-gray-800">📋 登録済み問題一覧</h2>
                 <span id="problemCount" class="text-sm text-gray-500">0 件</span>
@@ -2290,5 +2327,148 @@ JSON以外のテキストは出力しないでください。`
         </div>
     </dialog>
 </body>
+
+<script>
+    // === Vercel用書き出し機能 ===
+    async function exportForVercel() {
+        if (!dirHandle) {
+            alert('先に「設定」からフォルダを選択してください');
+            return;
+        }
+
+        // 権限の再確認 (読み取り)
+        const opts = { mode: 'read' };
+        if ((await dirHandle.queryPermission(opts)) !== 'granted') {
+            if ((await dirHandle.requestPermission(opts)) !== 'granted') {
+                alert('フォルダの読み取り権限がありません。');
+                return;
+            }
+        }
+
+        const btn = document.getElementById('exportVercelBtn');
+        const originalText = btn.textContent;
+
+        try {
+            // 1. 出力先フォルダを選択
+            alert('書き出し先のフォルダを選択してください。\n(例: プロジェクトのルートフォルダ)');
+            const targetHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+
+            if (!confirm('以下の処理を実行します。よろしいですか？\n\n1. 選択したフォルダに index.json を保存\n2. "problems" フォルダを作成し画像をコピー\n\n※既存のファイルは上書きされます。')) {
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = '書き出し中...';
+
+            // 2. 現在のデータを取得 (IndexedDB or FileSystem)
+            let problemsToExport = [];
+            if (isFileSystemMode) {
+                problemsToExport = await loadRawProblemsFromFileSystem();
+            } else {
+                if (!db) await initDB();
+                problemsToExport = await new Promise((resolve) => {
+                    const transaction = db.transaction([STORE_NAME], 'readonly');
+                    const store = transaction.objectStore(STORE_NAME);
+                    const req = store.getAll();
+                    req.onsuccess = () => resolve(req.result);
+                });
+            }
+
+            // 3. index.json 用のデータを整形
+            const cleanProblems = problemsToExport.map(p => {
+                const copy = { ...p };
+                delete copy.imageBlob;
+                delete copy.answerBlob;
+                delete copy.answerBlobs;
+                delete copy.explanationBlob;
+                delete copy.explanationBlobs;
+                delete copy.problemBlobs;
+
+                if (copy.images) {
+                    copy.images = copy.images.map(img => img.startsWith('./problems/') ? img : './problems/' + img.split('/').pop());
+                }
+                if (copy.explanationImages) {
+                    copy.explanationImages = copy.explanationImages.map(img => img.startsWith('./problems/') ? img : './problems/' + img.split('/').pop());
+                }
+                // 互換性
+                if (copy.answerImage && !copy.answerImage.startsWith('./problems/')) {
+                    copy.answerImage = './problems/' + copy.answerImage.split('/').pop();
+                }
+                if (copy.explanationImage && !copy.explanationImage.startsWith('./problems/')) {
+                    copy.explanationImage = './problems/' + copy.explanationImage.split('/').pop();
+                }
+
+                return copy;
+            });
+
+            // 4. index.json 書き出し
+            const indexHandle = await targetHandle.getFileHandle('index.json', { create: true });
+            const writable = await indexHandle.createWritable();
+            await writable.write(JSON.stringify(cleanProblems, null, 2));
+            await writable.close();
+
+            // 5. 画像ファイルのコピー
+            try {
+                const sourceProblemsDir = await dirHandle.getDirectoryHandle('problems');
+                const targetProblemsDir = await targetHandle.getDirectoryHandle('problems', { create: true });
+
+                // ファイル総数をカウント
+                let totalFiles = 0;
+                btn.textContent = 'ファイル数を確認中...';
+                const filesToCopy = [];
+                for await (const entry of sourceProblemsDir.values()) {
+                    if (entry.kind === 'file') {
+                        filesToCopy.push(entry);
+                    }
+                }
+                totalFiles = filesToCopy.length;
+
+                let copyCount = 0;
+                for (const handle of filesToCopy) {
+                    btn.textContent = `書き出し中... (${copyCount}/${totalFiles})`;
+                    const file = await handle.getFile();
+                    const targetFileHandle = await targetProblemsDir.getFileHandle(handle.name, { create: true });
+                    const targetWritable = await targetFileHandle.createWritable();
+                    await targetWritable.write(file);
+                    await targetWritable.close();
+                    copyCount++;
+                    btn.textContent = `書き出し中... (${copyCount}/${totalFiles})`;
+                }
+
+                alert(`書き出し完了！\n\n・index.json を保存しました\n・${copyCount} 個の画像ファイルを problems フォルダにコピーしました`);
+
+            } catch (e) {
+                console.warn('画像フォルダのコピーに失敗:', e);
+                alert(`画保存は完了しましたが、画像フォルダ(problems)のコピーに失敗しました。\n\n詳細: ${e.name}: ${e.message}\nもし「problems」フォルダが存在しない場合は、一度画像を登録してフォルダを作成してください。`);
+            }
+
+        } catch (err) {
+            console.error('Export Error:', err);
+            alert('書き出しエラー: ' + err.message);
+        } finally {
+            btn.disabled = false;
+            btn.textContent = originalText;
+        }
+    }
+
+    // Exportボタンイベント
+    const exportBtn = document.getElementById('exportVercelBtn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', exportForVercel);
+    }
+
+    // === ファイルシステムから読み込み (Export用) ===
+    // 生のJSONデータを取得(BlobURL化しない)
+    async function loadRawProblemsFromFileSystem() {
+        try {
+            const indexFile = await dirHandle.getFileHandle('index.json');
+            const file = await indexFile.getFile();
+            const text = await file.text();
+            return JSON.parse(text || '[]');
+        } catch {
+            return [];
+        }
+    }
+</script>
 
 </html>

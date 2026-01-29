@@ -53,9 +53,7 @@
             border-right: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        main {
-            /* Main content transparent/glass */
-        }
+
 
         section {
             background: rgba(255, 255, 255, 0.25) !important;
@@ -5669,7 +5667,7 @@
                 const isLocal = doc.id.startsWith('LOCAL');
                 const isCollected = collectedProblemIds.has(doc.id);
                 const item = document.createElement('div');
-                item.className = `result-card bg-white p-4 rounded-lg border shadow-sm transition-all duration-200 cursor-pointer ${isCollected ? 'border-indigo-500 bg-indigo-50 ring-1 ring-indigo-500' : 'border-gray-200 hover:border-indigo-300'}`;
+                item.className = `result-card p-4 rounded-lg border shadow-sm transition-all duration-200 cursor-pointer ${isCollected ? 'border-indigo-500 bg-indigo-50 ring-1 ring-indigo-500' : 'border-white/40 hover:border-indigo-300'}`;
                 item.onclick = (e) => {
                     // チェックボックスのクリックはバブリングでここに来るが、
                     // カード自体のクリックで詳細表示したい場合と、チェックボックスで選択したい場合を分ける
@@ -6196,6 +6194,16 @@
                         </div>
                     </div>
                 `;
+            }
+
+            // KaTeXレンダリング (詳細ビュー)
+            if (window.renderMathInElement) {
+                renderMathInElement(detailViewer, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false }
+                    ]
+                });
             }
         }
 
