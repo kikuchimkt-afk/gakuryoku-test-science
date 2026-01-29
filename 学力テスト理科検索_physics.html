@@ -246,10 +246,9 @@
                     <span
                         class="ml-2 text-sm bg-gray-200 text-gray-700 px-2 py-1 rounded-md align-middle">Desk-Top</span>
                 </h1>
-                <a href="問題登録.html"
+                <a href="問題登録.html" id="registrationButton"
                     class="bg-green-600 text-white py-2 px-4 rounded-lg font-semibold shadow-md hover:bg-green-700 transition-colors text-sm">
                     ＋ 問題登録
-                </a>
                 </a>
             </div>
             <div class="mb-4 text-sm text-gray-600">
@@ -5611,7 +5610,24 @@
             // 削除済みサンプルデータをフィルタリング
             filterDeletedSamples();
 
-            const allData = [...MOCK_SCIENCE_DATA, ...localProblems];
+            // index.json (Vercel用エクスポートデータ) の読み込み
+            let exportedData = [];
+            try {
+                const res = await fetch('./index.json');
+                if (res.ok) {
+                    exportedData = await res.json();
+                    console.log('Loaded index.json:', exportedData.length);
+                }
+            } catch (e) {
+                console.log('No index.json found or load failed', e);
+            }
+
+            // データの結合と重複排除 (IDをキーにする)
+            const rawData = [...MOCK_SCIENCE_DATA, ...exportedData, ...localProblems];
+            const dataMap = new Map();
+            rawData.forEach(doc => dataMap.set(doc.id, doc));
+            const allData = Array.from(dataMap.values());
+
             allData.forEach(doc => {
                 splitAndAdd(doc.unit, allUnits);
                 splitAndAdd(doc.grade, allGrades);
@@ -5640,6 +5656,11 @@
             if (badge && localProblems.length > 0) {
                 badge.textContent = `ローカル: ${localProblems.length}件`;
                 badge.classList.remove('hidden');
+            }
+            // Vercel環境判定: ホスト名に vercel.app が含まれていれば登録ボタンを非表示
+            if (window.location.hostname.includes('vercel.app')) {
+                const regBtn = document.getElementById('registrationButton');
+                if (regBtn) regBtn.style.display = 'none';
             }
             console.log('window.onload: Completed.');
         };
