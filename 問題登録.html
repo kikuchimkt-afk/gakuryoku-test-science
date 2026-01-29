@@ -1,0 +1,2294 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>理科問題 登録</title>
+    <!-- Tailwind CSSを読み込み -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Interフォントを読み込み */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        }
+
+        /* カスタムスクロールバー */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c0c0c0;
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #a0a0a0;
+        }
+
+        /* ドロップゾーンのスタイル */
+        .drop-zone {
+            border: 3px dashed #cbd5e1;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone:hover,
+        .drop-zone.dragover {
+            border-color: #6366f1;
+            background-color: #eef2ff;
+        }
+
+        .drop-zone.has-image {
+            border-style: solid;
+            border-color: #22c55e;
+        }
+
+        /* 登録済み問題カードのスタイル */
+        .problem-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        /* OCR分析中のオーバーレイ */
+        .analyzing-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+        }
+
+        .analyzing-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #e5e7eb;
+            border-top-color: #6366f1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-800 min-h-screen">
+
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+
+        <!-- ヘッダー -->
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-indigo-700">📝 理科問題 登録</h1>
+            <div class="flex gap-4">
+                <button id="openSettingsBtn" class="text-2xl p-2 hover:bg-gray-200 rounded-full transition-colors"
+                    title="設定を開く">
+                    ⚙️
+                </button>
+                <a href="学力テスト理科検索.html"
+                    class="bg-gray-600 text-white py-2 px-4 rounded-lg font-semibold shadow-md hover:bg-gray-700 transition-colors">
+                    🔍 検索ページへ
+                </a>
+            </div>
+        </div>
+
+
+
+        <!-- メインコンテンツ -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+
+            <!-- スクリーンショット貼り付けエリア（問題） -->
+            <div class="mb-6">
+                <label class="block text-lg font-semibold mb-3 text-gray-700">📄 問題画像 <span
+                        class="text-red-500">*</span></label>
+                <div id="dropZone"
+                    class="drop-zone rounded-lg p-8 text-center cursor-pointer min-h-[200px] flex flex-col items-center justify-center">
+                    <div id="dropZonePrompt" class="text-gray-500">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        <p class="text-lg font-medium">ここに問題のスクリーンショットを貼り付け</p>
+                        <p class="text-sm mt-2">Ctrl+V で貼り付け / クリックでファイル選択 / ドラッグ&ドロップ</p>
+                        <p class="text-xs text-indigo-500 font-bold mt-2">※複数枚登録可能（続けて貼り付けてください）</p>
+                    </div>
+                    <!-- ギャラリー表示エリア -->
+                    <div id="imageGallery" class="hidden grid grid-cols-2 md:grid-cols-3 gap-4 mt-4 w-full"></div>
+                </div>
+                <input type="file" id="fileInput" accept="image/*" class="hidden">
+                <div class="flex items-center gap-4 mt-3">
+                    <button id="clearImageBtn" class="hidden text-sm text-red-600 hover:text-red-800 font-medium">
+                        ✕ 画像をクリア
+                    </button>
+                    <button id="analyzeBtn"
+                        class="hidden text-sm bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-full font-medium transition-colors flex items-center gap-1 shadow-sm">
+                        <span>🤖</span> AIで分析
+                    </button>
+                    <span id="aiSuggestBadge"
+                        class="hidden text-sm bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-medium">
+                        ✨ AIが提案しました
+                    </span>
+                </div>
+            </div>
+
+            <!-- 解説・解答エリア（横並び） -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+
+                <!-- 解説画像 -->
+                <div>
+                    <label class="block text-lg font-semibold mb-3 text-gray-700">📝 解説画像</label>
+                    <div id="explanationDropZone"
+                        class="drop-zone rounded-lg p-4 text-center cursor-pointer min-h-[150px] flex flex-col items-center justify-center">
+                        <div id="explanationDropZonePrompt" class="text-gray-500">
+                            <svg class="w-10 h-10 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                </path>
+                            </svg>
+                            <p class="text-sm font-medium">解説を貼り付け</p>
+                            <p class="text-xs mt-1 text-gray-400">任意 (複数可)</p>
+                        </div>
+                        <!-- 解説画像ギャラリー -->
+                        <div id="explanationGallery" class="hidden grid grid-cols-2 gap-2 mt-2 w-full"></div>
+                    </div>
+                    <input type="file" id="explanationFileInput" accept="image/*" class="hidden">
+                    <button id="clearExplanationBtn"
+                        class="hidden mt-2 text-xs text-red-600 hover:text-red-800 font-medium">
+                        ✕ 全てクリア
+                    </button>
+                    <!-- AIへの指示入力 -->
+                    <div class="mt-3 mb-2">
+                        <input type="text" id="aiInstructionInput" placeholder="AIへの指示（任意。例：小学生向けに、計算過程を省略せず）"
+                            class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                    </div>
+                    <button id="generateExplanationBtn"
+                        class="mt-2 text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded hover:bg-indigo-200 transition-colors flex items-center gap-1 mx-auto">
+                        <span>✨</span> 解説をAI生成
+                    </button>
+                </div>
+
+                <!-- 解答画像 -->
+                <div>
+                    <label class="block text-lg font-semibold mb-3 text-gray-700">✅ 解答画像</label>
+                    <div id="answerDropZone"
+                        class="drop-zone rounded-lg p-4 text-center cursor-pointer min-h-[150px] flex flex-col items-center justify-center">
+                        <div id="answerDropZonePrompt" class="text-gray-500">
+                            <svg class="w-10 h-10 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                </path>
+                            </svg>
+                            <p class="text-sm font-medium">解答を貼り付け</p>
+                            <p class="text-xs mt-1 text-gray-400">任意</p>
+                        </div>
+                        <img id="answerPreview" class="hidden max-w-full max-h-[300px] object-contain rounded-lg"
+                            alt="解答プレビュー">
+                    </div>
+                    <input type="file" id="answerFileInput" accept="image/*" class="hidden">
+                    <button id="clearAnswerBtn" class="hidden mt-2 text-xs text-red-600 hover:text-red-800 font-medium">
+                        ✕ 解答をクリア
+                    </button>
+                </div>
+            </div>
+
+            <!-- メタデータ入力フォーム -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+
+                <!-- 出題年・月・問題種別 -->
+                <div class="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label for="yearSelect" class="block text-sm font-semibold mb-2 text-gray-700">出題年度</label>
+                        <select id="yearSelect"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="">選択</option>
+                            <!-- 2020年度〜現在+1年度を動的に生成 -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="monthSelect" class="block text-sm font-semibold mb-2 text-gray-700">出題月</label>
+                        <select id="monthSelect"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="">選択</option>
+                            <option value="1">1月</option>
+                            <option value="2">2月</option>
+                            <option value="3">3月</option>
+                            <option value="4">4月</option>
+                            <option value="5">5月</option>
+                            <option value="6">6月</option>
+                            <option value="7">7月</option>
+                            <option value="8">8月</option>
+                            <option value="9">9月</option>
+                            <option value="10">10月</option>
+                            <option value="11">11月</option>
+                            <option value="12">12月</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2 text-gray-700">問題種別 <span
+                                class="text-red-500">*</span></label>
+                        <div class="flex gap-2">
+                            <select id="testTypeSelect"
+                                class="flex-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <!-- 動的に生成 -->
+                            </select>
+                            <button id="editTestTypesBtn"
+                                class="bg-gray-200 text-gray-600 px-3 rounded-lg hover:bg-gray-300 transition-colors"
+                                title="種別を編集">
+                                ✏️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 履修学年 -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2 text-gray-700">履修学年 <span
+                            class="text-red-500">*</span></label>
+                    <div class="flex space-x-6 mt-2">
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="grade" value="1" class="form-radio h-5 w-5 text-indigo-600">
+                            <span class="ml-2 text-gray-700">1年</span>
+                        </label>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="grade" value="2" class="form-radio h-5 w-5 text-indigo-600">
+                            <span class="ml-2 text-gray-700">2年</span>
+                        </label>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="grade" value="3" class="form-radio h-5 w-5 text-indigo-600">
+                            <span class="ml-2 text-gray-700">3年</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- ページ数 -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold mb-2 text-gray-700">総ページ数 (PDF作成用) <span
+                            class="text-red-500">*</span></label>
+                    <div class="flex space-x-6 mt-2">
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="pageCount" value="1" checked
+                                class="form-radio h-5 w-5 text-indigo-600">
+                            <span class="ml-2 text-gray-700">1ページ</span>
+                        </label>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="pageCount" value="2" class="form-radio h-5 w-5 text-indigo-600">
+                            <span class="ml-2 text-gray-700">2ページ</span>
+                        </label>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="pageCount" value="3" class="form-radio h-5 w-5 text-indigo-600">
+                            <span class="ml-2 text-gray-700">3ページ</span>
+                        </label>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="pageCount" value="4" class="form-radio h-5 w-5 text-indigo-600">
+                            <span class="ml-2 text-gray-700">4ページ</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 mb-6">
+                <!-- 単元 -->
+                <div>
+                    <label for="unitInput" class="block text-sm font-semibold mb-2 text-gray-700">単元名 <span
+                            class="text-red-500">*</span></label>
+                    <input type="text" id="unitInput" placeholder="例: 電気回路" list="unitSuggestions"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <datalist id="unitSuggestions">
+                        <!-- 既存の単元名を動的に追加 -->
+                    </datalist>
+                </div>
+
+                <!-- キーワード -->
+                <div>
+                    <label for="keywordsInput" class="block text-sm font-semibold mb-2 text-gray-700">キーワード</label>
+                    <input type="text" id="keywordsInput" placeholder="例: 直列,並列,オームの法則"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <p class="text-xs text-gray-500 mt-1">カンマ区切りで複数入力可能</p>
+                </div>
+
+                <!-- コメント -->
+                <div>
+                    <label for="commentInput" class="block text-sm font-semibold mb-2 text-gray-700">コメント</label>
+                    <input type="text" id="commentInput" placeholder="例: 難問, 計算ミス注意"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <p class="text-xs text-gray-500 mt-1">PDFのヘッダーにも表示されます</p>
+                </div>
+            </div>
+
+            <!-- 保存ボタン -->
+            <div class="flex gap-4">
+                <button id="saveBtn"
+                    class="flex-1 bg-indigo-600 text-white py-3 px-6 rounded-lg font-semibold shadow-md hover:bg-indigo-700 transition-colors text-lg">
+                    💾 保存する
+                </button>
+                <button id="resetBtn"
+                    class="bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-300 transition-colors">
+                    リセット
+                </button>
+            </div>
+
+            <!-- 保存結果メッセージ -->
+            <div id="saveMessage" class="hidden mt-4 p-4 rounded-lg text-center font-medium"></div>
+        </div>
+
+        <!-- 登録済み問題一覧 -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-gray-800">📋 登録済み問題一覧</h2>
+                <span id="problemCount" class="text-sm text-gray-500">0 件</span>
+            </div>
+            <div id="problemList" class="space-y-3 custom-scrollbar max-h-[400px] overflow-y-auto">
+                <p class="text-gray-500 text-center py-4">登録された問題はありません</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // === IndexedDB 設定 ===
+        const DB_NAME = 'ScienceProblemsDB';
+        const DB_VERSION = 5; // バージョン5: directoryHandles確実作成
+        const STORE_NAME = 'localProblems';
+        const HANDLE_STORE_NAME = 'directoryHandles'; // フォルダハンドル保存用
+        let db = null;
+        let problemImageBlobs = []; // 配列
+        let explanationImageBlobs = []; // 配列に変更 (複数画像対応)
+        let answerImageBlob = null;
+        let isAnalyzing = false;
+
+        // === File System Access API 設定 ===
+        const PROBLEMS_DIR = 'problems'; // 画像保存用サブディレクトリ
+        let isFileSystemMode = false;
+        let dirHandle = null; // フォルダハンドル
+
+        // === 指導要領データベース ===
+        const CURRICULUM_DATA = {
+            "1": {
+                "植物の分類": ["被子植物", "裸子植物", "双子葉類", "単子葉類", "子房", "胚珠", "合弁花", "離弁花", "アブラナ", "マツ", "イチョウ", "サクラ", "ツツジ", "タンポポ",
+                    "エンドウ", "スギ", "トウモロコシ", "ホウセンカ", "網状脈", "平行脈", "主根", "ひげ根", "側根"],
+                "観察器具の操作": ["顕微鏡", "ルーペ", "プレパラート", "対物レンズ", "接眼レンズ", "レボルバー", "倍率", "視野", "反射鏡"],
+                "胞子で増える植物": ["シダ植物", "コケ植物", "胞子", "仮根", "イヌワラビ", "ゼニゴケ", "スギゴケ"],
+                "光の反射・屈折": ["反射", "屈折", "入射角", "反射角", "屈折角", "全反射", "鏡", "光ファイバー"],
+                "凸レンズによる像": ["焦点", "焦点距離", "実像", "虚像", "スクリーン", "倍率"],
+                "音の性質": ["振動数", "振幅", "音の高さ", "音の大きさ", "音速", "オシロスコープ"],
+                "力のつり合い": ["バネ", "弾性力", "重力", "摂気力", "抵抗力", "垂直抗力", "ニュートン", "N"],
+                "火山と火成岩": ["マグマ", "溶岩", "火山灰", "火成岩", "深成岩", "火山岩", "結晶", "鉱物"],
+                "地震": ["震源", "震央", "P波", "S波", "初期微動", "主要動", "マグニチュード", "震度"],
+                "地層のでき方": ["堆積", "堆積岩", "化石", "示準化石", "砲岩", "泥岩", "石灰岩", "凝灰岩"]
+            },
+            "2": {
+                "物質の性質と密度": ["密度", "体積", "質量", "メスシリンダー", "金属", "有機物", "無機物"],
+                "気体の性質と集め方": ["酸素", "水素", "二酸化炭素", "アンモニア", "水上置換", "上方置換", "下方置換", "燃焼"],
+                "溶解度と再結晶": ["溶解度", "飽和水溶液", "再結晶", "結晶", "ミョウバン", "硡酸カリウム", "質量パーセント濃度"],
+                "状態変化と蒸留": ["溶点", "沸点", "蒸留", "水", "エタノール", "沸騰石", "粒子の運動"],
+                "動物の分類": ["脊椎動物", "無脊椎動物", "胎生", "卵生", "哺乳類", "鳥類", "爬虫類", "両生類", "魚類", "節足動物", "軟体動物"],
+                "物質の分解": ["分解", "電気分解", "炭酸水素ナトリウム", "酸化銀", "原子", "分子"],
+                "酸化と還元": ["酸化", "還元", "燃焼", "酸化銅", "酸化マグネシウム", "炭素"],
+                "化学変化と質量": ["質量保存の法則", "化合", "化学反応式", "化学式"],
+                "生物と細胞": ["細胞", "核", "細胞質", "細胞膜", "細胞壁", "葉緑体", "液胞"],
+                "光合成と呼吸": ["光合成", "呼吸", "二酸化炭素", "酸素", "デンプン", "よう素", "ヨウ素液"],
+                "消化と吸収": ["消化", "吸収", "消化酵素", "アミラーゼ", "ペプシン", "柔毛", "小腸"],
+                "血液の循環": ["心臓", "動脈", "静脈", "毛細血管", "赤血球", "白血球", "血漿板", "血清"],
+                "刺激と反応": ["神経", "感覚器官", "反射", "脳", "せき髄", "運動神経", "感覚神経"],
+                "電気回路": ["電流", "電圧", "抵抗", "オームの法則", "直列", "並列", "電池"],
+                "磁界と電磁誘導": ["磁界", "磁力線", "電磁誘導", "誘導電流", "コイル", "モーター", "発電機"],
+                "天気の変化": ["気圧", "前線", "高気圧", "低気圧", "雲", "降水", "湿度", "飽和水蒸気量"]
+            },
+            "3": {
+                "原子とイオン": ["イオン", "陽イオン", "陰イオン", "電解質", "電気分解"],
+                "酸とアルカリ": ["酸性", "アルカリ性", "pH", "水素イオン", "水酸化物イオン"],
+                "中和と塩": ["中和", "塩", "中和点", "指示薬"],
+                "細胞分裂": ["細胞分裂", "染色体", "核", "紡錘体"],
+                "遺伝の規則性": ["遺伝", "遺伝子", "形質", "優性", "劣性", "DNA", "メンデル"],
+                "物体の運動": ["速度", "加速度", "等速直線運動", "慣性", "記録タイマー"],
+                "仕事とエネルギー": ["仕事", "エネルギー", "位置エネルギー", "運動エネルギー", "力学的エネルギー", "仕事率"],
+                "天体の動き": ["日周運動", "年周運動", "公転", "自転", "南中高度", "黄道", "透明半球"],
+                "月と金星": ["月の満ち欠け", "金星", "内惑星", "外惑星", "公転周期"]
+            }
+        };
+
+        // === IndexedDB 初期化 ===
+        function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    resolve(db);
+                };
+
+                request.onupgradeneeded = (event) => {
+                    const database = event.target.result;
+                    if (!database.objectStoreNames.contains(STORE_NAME)) {
+                        const store = database.createObjectStore(STORE_NAME, { keyPath: 'id' });
+                        store.createIndex('year', 'year', { unique: false });
+                        store.createIndex('grade', 'grade', { unique: false });
+                        store.createIndex('createdAt', 'createdAt', { unique: false });
+                    }
+                    // フォルダハンドル用ストア
+                    if (!database.objectStoreNames.contains(HANDLE_STORE_NAME)) {
+                        database.createObjectStore(HANDLE_STORE_NAME);
+                    }
+                };
+            });
+        }
+
+        // === フォルダハンドルを保存 ===
+        async function saveDirectoryHandle(handle) {
+            console.log('saveDirectoryHandle: Starting...', handle);
+            return new Promise((resolve, reject) => {
+                try {
+                    if (!db) {
+                        console.error('saveDirectoryHandle: db is null!');
+                        reject(new Error('Database not initialized'));
+                        return;
+                    }
+                    if (!db.objectStoreNames.contains(HANDLE_STORE_NAME)) {
+                        console.error('saveDirectoryHandle: Store not found!', HANDLE_STORE_NAME);
+                        reject(new Error('Handle store not found'));
+                        return;
+                    }
+                    const transaction = db.transaction([HANDLE_STORE_NAME], 'readwrite');
+                    const store = transaction.objectStore(HANDLE_STORE_NAME);
+                    const request = store.put(handle, 'dataFolder');
+                    request.onsuccess = () => {
+                        console.log('saveDirectoryHandle: Success!');
+                        resolve();
+                    };
+                    request.onerror = () => {
+                        console.error('saveDirectoryHandle: Error:', request.error);
+                        reject(request.error);
+                    };
+                } catch (e) {
+                    console.error('saveDirectoryHandle: Exception:', e);
+                    reject(e);
+                }
+            });
+        }
+
+        // === フォルダハンドルを読み込み ===
+        async function loadDirectoryHandle() {
+            console.log('loadDirectoryHandle: Starting...');
+            return new Promise((resolve, reject) => {
+                try {
+                    if (!db) {
+                        console.warn('loadDirectoryHandle: db is null');
+                        resolve(null);
+                        return;
+                    }
+                    if (!db.objectStoreNames.contains(HANDLE_STORE_NAME)) {
+                        console.warn('loadDirectoryHandle: Store not found', HANDLE_STORE_NAME);
+                        resolve(null);
+                        return;
+                    }
+                    const transaction = db.transaction([HANDLE_STORE_NAME], 'readonly');
+                    const store = transaction.objectStore(HANDLE_STORE_NAME);
+                    const request = store.get('dataFolder');
+                    request.onsuccess = () => {
+                        console.log('loadDirectoryHandle: Result:', request.result);
+                        resolve(request.result || null);
+                    };
+                    request.onerror = () => {
+                        console.error('loadDirectoryHandle: Error:', request.error);
+                        reject(request.error);
+                    };
+                } catch (e) {
+                    console.error('loadDirectoryHandle: Exception:', e);
+                    resolve(null);
+                }
+            });
+        }
+
+        // === フォルダ選択処理（UI更新のみ、保存はしない） ===
+        async function selectFolder() {
+            try {
+                console.log('selectFolder: Starting...');
+                const handle = await window.showDirectoryPicker({ mode: 'readwrite' });
+                console.log('selectFolder: Got handle:', handle.name);
+                dirHandle = handle;
+                isFileSystemMode = true;
+
+                // problemsサブディレクトリを作成確認
+                await handle.getDirectoryHandle(PROBLEMS_DIR, { create: true });
+
+                // UI更新（まだ保存はしない）
+                updateStorageStatus();
+                showMessage('フォルダを選択しました。「設定を保存」ボタンで保存してください。', 'success');
+            } catch (e) {
+                if (e.name !== 'AbortError') {
+                    console.error('Folder selection error:', e);
+                    showMessage('フォルダ選択に失敗しました: ' + e.message, 'error');
+                }
+            }
+        }
+
+        // === 設定を保存 ===
+        async function saveSettings() {
+            try {
+                if (dirHandle) {
+                    console.log('saveSettings: Saving directory handle to IndexedDB...');
+                    await saveDirectoryHandle(dirHandle);
+
+                    // LocalStorageにもフォルダ名を保存（バックアップ）
+                    localStorage.setItem('savedFolderName', dirHandle.name);
+                    console.log('saveSettings: Folder name saved to LocalStorage:', dirHandle.name);
+
+                    showMessage('設定を保存しました！', 'success');
+
+                    // 問題一覧を再読み込み
+                    await renderProblemList();
+                } else {
+                    showMessage('フォルダを選択してください', 'error');
+                }
+            } catch (e) {
+                console.error('saveSettings error:', e);
+                showMessage('設定の保存に失敗しました: ' + e.message, 'error');
+            }
+        }
+
+        // === 保存済みフォルダハンドルの復元 ===
+        async function restoreDirectoryHandle() {
+            console.log('restoreDirectoryHandle: Starting...');
+            try {
+                const handle = await loadDirectoryHandle();
+                console.log('restoreDirectoryHandle: loadDirectoryHandle returned:', handle);
+
+                if (handle) {
+                    console.log('restoreDirectoryHandle: Handle found, checking permission...');
+                    // queryPermissionで権限状態を確認（ダイアログを表示しない）
+                    const permission = await handle.queryPermission({ mode: 'readwrite' });
+                    console.log('restoreDirectoryHandle: Permission status:', permission);
+
+                    if (permission === 'granted') {
+                        // 既に権限があれば自動復元
+                        dirHandle = handle;
+                        isFileSystemMode = true;
+                        console.log('restoreDirectoryHandle: Permission granted, mode set to FileSystem');
+                        updateStorageStatus();
+                        return true;
+                    } else {
+                        // 権限がなくてもフォルダ名を記憶（UI表示用）
+                        dirHandle = handle;
+                        isFileSystemMode = false;
+                        console.log('restoreDirectoryHandle: Permission not granted, showing pending status');
+                        updateStorageStatusPending();
+                        return false;
+                    }
+                } else {
+                    // IndexedDBにハンドルがない場合、LocalStorageから前回のフォルダ名を取得
+                    const savedFolderName = localStorage.getItem('savedFolderName');
+                    if (savedFolderName) {
+                        console.log('restoreDirectoryHandle: No handle, but found saved folder name:', savedFolderName);
+                        updateStorageStatusPendingWithName(savedFolderName);
+                    }
+                }
+            } catch (e) {
+                console.log('restoreDirectoryHandle: Error:', e);
+            }
+            return false;
+        }
+
+        // === ストレージ状態UI更新（権限待ち状態、フォルダ名あり） ===
+        function updateStorageStatusPending() {
+            const statusEl = document.getElementById('storageStatus');
+            const pathEl = document.getElementById('folderPathDisplay');
+
+            if (statusEl && dirHandle) {
+                statusEl.textContent = '要再接続';
+                statusEl.className = 'text-xs font-medium px-2 py-1 rounded-full bg-yellow-100 text-yellow-700 border border-yellow-200 shadow-sm';
+                if (pathEl) pathEl.textContent = dirHandle.name + ' (フォルダを再選択してください)';
+            }
+        }
+
+        // === ストレージ状態UI更新（ハンドルなし、フォルダ名のみ） ===
+        function updateStorageStatusPendingWithName(folderName) {
+            const statusEl = document.getElementById('storageStatus');
+            const pathEl = document.getElementById('folderPathDisplay');
+
+            if (statusEl) {
+                statusEl.textContent = '要再接続';
+                statusEl.className = 'text-xs font-medium px-2 py-1 rounded-full bg-yellow-100 text-yellow-700 border border-yellow-200 shadow-sm';
+                if (pathEl) pathEl.textContent = folderName + ' (フォルダを再選択してください)';
+            }
+        }
+
+        // === ストレージ状態UI更新 ===
+        function updateStorageStatus() {
+            const statusEl = document.getElementById('storageStatus');
+            const pathEl = document.getElementById('folderPathDisplay');
+
+            if (isFileSystemMode && dirHandle) {
+                statusEl.textContent = 'ローカルフォルダ';
+                statusEl.className = 'text-xs font-medium px-2 py-1 rounded-full bg-green-100 text-green-700 border border-green-200 shadow-sm';
+                pathEl.textContent = dirHandle.name;
+            } else {
+                // LocalStorageから前回のフォルダ名を取得して表示
+                const savedFolderName = localStorage.getItem('savedFolderName');
+                if (savedFolderName) {
+                    statusEl.textContent = '要再接続';
+                    statusEl.className = 'text-xs font-medium px-2 py-1 rounded-full bg-yellow-100 text-yellow-700 border border-yellow-200 shadow-sm';
+                    pathEl.textContent = savedFolderName + ' (フォルダを再選択)';
+                } else {
+                    statusEl.textContent = 'ブラウザ内保存';
+                    statusEl.className = 'text-xs font-medium px-2 py-1 rounded-full bg-white text-gray-600 border border-gray-200 shadow-sm';
+                    pathEl.textContent = '未選択 (IndexedDB)';
+                }
+            }
+        }
+
+        // === ファイルシステムに問題を保存 ===
+        async function saveProblemToFileSystem(problemData) {
+            // index.jsonの読み込みまたは作成
+            let problems = [];
+            try {
+                const handleForRead = await dirHandle.getFileHandle('index.json');
+                const fileForRead = await handleForRead.getFile();
+                const textForRead = await fileForRead.text();
+                problems = JSON.parse(textForRead || '[]');
+                // 既存データを更新または追加
+                const existingIndex = problems.findIndex(p => p.id === problemData.id);
+                const problemsDir = await dirHandle.getDirectoryHandle(PROBLEMS_DIR, { create: true });
+
+                // もし既存データがあれば、古い画像ファイルを削除しておく (ゴミ掃除)
+                if (existingIndex >= 0) {
+                    const oldData = problems[existingIndex];
+                    console.log('Cleaning up old files for ID:', problemData.id);
+                    const filesToDelete = [];
+                    if (oldData.images) filesToDelete.push(...oldData.images);
+                    if (oldData.explanationImages) filesToDelete.push(...oldData.explanationImages);
+                    if (oldData.explanationImage) filesToDelete.push(oldData.explanationImage);
+                    if (oldData.answerImage) filesToDelete.push(oldData.answerImage);
+
+                    for (const fileName of filesToDelete) {
+                        try {
+                            await problemsDir.removeEntry(fileName);
+                            console.log('Deleted old file:', fileName);
+                        } catch (e) {
+                            // ファイルが既にない場合は無視
+                        }
+                    }
+                }
+
+                // 画像ファイルを保存
+
+                // 問題画像
+                const imageFileNames = [];
+                for (let i = 0; i < problemData.problemBlobs.length; i++) {
+                    const fileName = `${problemData.id}_problem_${i + 1}.png`;
+                    const fileHandle = await problemsDir.getFileHandle(fileName, { create: true });
+                    const writable = await fileHandle.createWritable();
+                    await writable.write(problemData.problemBlobs[i]);
+                    await writable.close();
+                    imageFileNames.push(fileName);
+                }
+
+                // 解説画像
+                const explanationFileNames = [];
+                if (problemData.explanationBlobs) {
+                    for (let i = 0; i < problemData.explanationBlobs.length; i++) {
+                        const fileName = `${problemData.id}_explanation_${i + 1}.png`;
+                        const fileHandle = await problemsDir.getFileHandle(fileName, { create: true });
+                        const writable = await fileHandle.createWritable();
+                        await writable.write(problemData.explanationBlobs[i]);
+                        await writable.close();
+                        explanationFileNames.push(fileName);
+                    }
+                }
+
+                // 解答画像
+                let answerFileName = null;
+                if (problemData.answerBlob) {
+                    answerFileName = `${problemData.id}_answer.png`;
+                    const fileHandle = await problemsDir.getFileHandle(answerFileName, { create: true });
+                    const writable = await fileHandle.createWritable();
+                    await writable.write(problemData.answerBlob);
+                    await writable.close();
+                }
+
+                // メタデータ作成（Blobは含めない）
+                const metaData = {
+                    id: problemData.id,
+                    grade: problemData.grade,
+                    unit: problemData.unit,
+                    keywords: problemData.keywords,
+                    year: problemData.year,
+                    month: problemData.month,
+                    testType: problemData.testType,
+                    comment: problemData.comment,
+                    pageCount: problemData.pageCount,
+                    createdAt: problemData.createdAt,
+                    images: imageFileNames,
+                    explanationImages: explanationFileNames,
+                    answerImage: answerFileName
+                };
+
+                // 既存データを更新または追加
+                if (existingIndex >= 0) {
+                    problems[existingIndex] = metaData;
+                } else {
+                    problems.push(metaData);
+                }
+
+                // index.jsonに書き込み
+                const indexFile = await dirHandle.getFileHandle('index.json', { create: true });
+                const writable = await indexFile.createWritable();
+                await writable.write(JSON.stringify(problems, null, 2));
+                await writable.close();
+            } catch (e) {
+                console.error('saveProblemToFileSystem error:', e);
+                throw e;
+            }
+        }
+
+        // === ファイルシステムから全問題を読み込み ===
+        async function getAllProblemsFromFileSystem() {
+            try {
+                const indexFile = await dirHandle.getFileHandle('index.json');
+                const file = await indexFile.getFile();
+                const text = await file.text();
+                const problems = JSON.parse(text || '[]');
+
+                const problemsDir = await dirHandle.getDirectoryHandle(PROBLEMS_DIR);
+
+                // 各問題の画像URLを生成
+                for (const problem of problems) {
+                    // 問題画像
+                    if (problem.images && problem.images.length > 0) {
+                        const imageUrls = [];
+                        for (const imgName of problem.images) {
+                            try {
+                                const imgHandle = await problemsDir.getFileHandle(imgName);
+                                const imgFile = await imgHandle.getFile();
+                                imageUrls.push(URL.createObjectURL(imgFile));
+                            } catch { }
+                        }
+                        problem.images = imageUrls;
+                    }
+
+                    // 解説画像
+                    if (problem.explanationImages && problem.explanationImages.length > 0) {
+                        const expUrls = [];
+                        for (const imgName of problem.explanationImages) {
+                            try {
+                                const imgHandle = await problemsDir.getFileHandle(imgName);
+                                const imgFile = await imgHandle.getFile();
+                                expUrls.push(URL.createObjectURL(imgFile));
+                            } catch { }
+                        }
+                        problem.explanationImages = expUrls;
+                    }
+
+                    // 解答画像
+                    if (problem.answerImage) {
+                        try {
+                            const imgHandle = await problemsDir.getFileHandle(problem.answerImage);
+                            const imgFile = await imgHandle.getFile();
+                            problem.answerImage = URL.createObjectURL(imgFile);
+                        } catch { }
+                    }
+                }
+
+                return problems;
+            } catch (e) {
+                console.log('No index.json found or error reading:', e);
+                return [];
+            }
+        }
+
+        // === 次のIDを取得 ===
+        async function getNextId() {
+            const problems = await getAllProblems();
+            if (problems.length === 0) {
+                return 'LOCAL001';
+            } else {
+                const maxId = Math.max(...problems.map(p => {
+                    const num = parseInt(p.id.replace('LOCAL', ''));
+                    return isNaN(num) ? 0 : num;
+                }));
+                return `LOCAL${String(maxId + 1).padStart(3, '0')}`;
+            }
+        }
+
+        // === 問題を保存 ===
+        async function saveProblem(problemData) {
+            if (isFileSystemMode && dirHandle) {
+                await saveProblemToFileSystem(problemData);
+                return problemData.id;
+            } else {
+                return new Promise((resolve, reject) => {
+                    const transaction = db.transaction([STORE_NAME], 'readwrite');
+                    const store = transaction.objectStore(STORE_NAME);
+                    const request = store.put(problemData);
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+        }
+
+        // === 全問題を取得 ===
+        async function getAllProblems() {
+            if (isFileSystemMode && dirHandle) {
+                return await getAllProblemsFromFileSystem();
+            } else {
+                return new Promise((resolve, reject) => {
+                    const transaction = db.transaction([STORE_NAME], 'readonly');
+                    const store = transaction.objectStore(STORE_NAME);
+                    const request = store.getAll();
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+        }
+
+        // === IDで問題を取得 (編集用) ===
+        async function getProblemById(id) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([STORE_NAME], 'readonly');
+                const store = transaction.objectStore(STORE_NAME);
+                const request = store.get(id);
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        // === 編集モード読み込み ===
+        async function loadForEdit(id) {
+            try {
+                // getAllProblems を使用することで、IndexedDB と FileSystem の両方に対応
+                const allProblems = await getAllProblems();
+                const problem = allProblems.find(p => p.id === id);
+                if (!problem) {
+                    alert('指定された問題が見つかりません');
+                    return;
+                }
+
+                // タイトル変更
+                document.querySelector('h1').textContent = `📝 理科問題 編集 (${id})`;
+                document.getElementById('saveBtn').textContent = '💾 更新する';
+
+                // フォーム入力
+                document.getElementById('yearSelect').value = problem.year || '';
+                document.getElementById('monthSelect').value = problem.month || '';
+                document.getElementById('testTypeSelect').value = problem.testType || '';
+
+                if (problem.grade) {
+                    const radio = document.querySelector(`input[name="grade"][value="${problem.grade}"]`);
+                    if (radio) radio.checked = true;
+                }
+
+                if (problem.pageCount) {
+                    const radio = document.querySelector(`input[name="pageCount"][value="${problem.pageCount}"]`);
+                    if (radio) radio.checked = true;
+                }
+
+                document.getElementById('unitInput').value = problem.unit || '';
+                document.getElementById('keywordsInput').value = problem.keywords || '';
+                document.getElementById('commentInput').value = problem.comment || '';
+
+                // 画像読み込み (Blobとして復元)
+                // IndexedDBの場合: blobがそのまま入っている
+                // FileSystemの場合: getAllProblemsでBlobURLになっている -> fetchしてBlobに戻す
+
+                // 問題画像
+                problemImageBlobs = [];
+                if (problem.problemBlobs) {
+                    problemImageBlobs = problem.problemBlobs; // IndexedDB direct
+                } else if (problem.images && problem.images.length > 0) {
+                    // From URL or FileSystem names (getAllProblems returns 'images' as URLs)
+                    // If getAllProblems returns URLs, fetch them
+                    for (const url of (problem.images || [])) {
+                        // file system mode's getAllProblems returns URLs in 'images'
+                        // indexedDB mode's getAllProblems returns Blobs in 'problemBlobs'. 
+                        // Actually getAllProblems logic:
+                        // FS: returns object with images=[url, url...]
+                        // IDB: returns object with problemBlobs=[blob...] and imageBlob=blob...
+
+                        if (typeof url === 'string') {
+                            const blob = await fetch(url).then(r => r.blob());
+                            problemImageBlobs.push(blob);
+                        }
+                    }
+                }
+                // 互換性: imageBlob
+                if (problemImageBlobs.length === 0 && problem.imageBlob) {
+                    problemImageBlobs.push(problem.imageBlob);
+                }
+                renderProblemImages();
+                if (problemImageBlobs.length > 0) {
+                    document.getElementById('dropZonePrompt').classList.add('hidden');
+                    document.getElementById('dropZone').classList.add('has-image');
+                    document.getElementById('clearImageBtn').classList.remove('hidden');
+                    document.getElementById('analyzeBtn').classList.remove('hidden');
+                }
+
+                // 解説画像
+                explanationImageBlobs = [];
+                if (problem.explanationBlobs) {
+                    explanationImageBlobs = problem.explanationBlobs;
+                } else if (problem.explanationImages && problem.explanationImages.length > 0) {
+                    for (const url of problem.explanationImages) {
+                        if (typeof url === 'string') {
+                            const blob = await fetch(url).then(r => r.blob());
+                            explanationImageBlobs.push(blob);
+                        }
+                    }
+                } else if (problem.explanationBlob) {
+                    explanationImageBlobs.push(problem.explanationBlob);
+                }
+                renderExplanationImages(); // Corrected function name
+
+                // 解答画像
+                answerImageBlob = null;
+                if (problem.answerBlob) {
+                    answerImageBlob = problem.answerBlob;
+                } else if (problem.answerImage) { // URL
+                    if (typeof problem.answerImage === 'string') {
+                        answerImageBlob = await fetch(problem.answerImage).then(r => r.blob());
+                    }
+                }
+                if (answerImageBlob) {
+                    const url = URL.createObjectURL(answerImageBlob);
+                    const preview = document.getElementById('answerPreview');
+                    preview.src = url;
+                    preview.classList.remove('hidden');
+                    document.getElementById('answerDropZonePrompt').classList.add('hidden');
+                    document.getElementById('clearAnswerBtn').classList.remove('hidden');
+                }
+
+                // ID保持 (更新時に使うため、saveProblemは引数のidを使うので、
+                // saveBtnクリックイベントで、editingIdがあればそれを使うように変更必要)
+                // グローバル変数 editingId を用意するか、データ属性にセット
+                document.getElementById('saveBtn').dataset.editingId = id;
+
+            } catch (e) {
+                console.error('Edit load error:', e);
+                alert('編集データの読み込みに失敗しました');
+            }
+        }
+
+        // === 問題を削除 ===
+        async function deleteProblem(id) {
+            if (isFileSystemMode) {
+                try {
+                    // index.json から削除
+                    const indexFile = await dirHandle.getFileHandle('index.json');
+                    const file = await indexFile.getFile();
+                    const text = await file.text();
+                    let problems = JSON.parse(text || '[]');
+
+                    // 削除対象のデータを取得（ファイル名特定のため）
+                    const target = problems.find(p => p.id === id);
+                    if (!target) return;
+
+                    // 配列から削除
+                    problems = problems.filter(p => p.id !== id);
+
+                    // index.json 更新
+                    const writable = await indexFile.createWritable();
+                    await writable.write(JSON.stringify(problems, null, 2));
+                    await writable.close();
+
+                    // 関連ファイルの削除
+                    let problemsDir;
+                    try {
+                        problemsDir = await dirHandle.getDirectoryHandle(PROBLEMS_DIR);
+                    } catch (e) {
+                        console.log('Problems directory not found, skipping file deletion');
+                        return;
+                    }
+
+                    // 削除対象のファイルリストを作成
+                    const filesToDelete = [];
+                    if (target.images) filesToDelete.push(...target.images);
+                    if (target.explanationImages) filesToDelete.push(...target.explanationImages);
+                    if (target.explanationImage) filesToDelete.push(target.explanationImage);
+                    if (target.answerImage) filesToDelete.push(target.answerImage);
+
+                    console.log('Deleting files for problem:', id, filesToDelete);
+                    for (const fileName of filesToDelete) {
+                        try {
+                            await problemsDir.removeEntry(fileName);
+                            console.log('Deleted:', fileName);
+                        } catch (e) {
+                            console.warn('Failed to delete file (maybe already gone):', fileName, e);
+                        }
+                    }
+
+                } catch (error) {
+                    console.error('Delete error:', error);
+                    throw error;
+                }
+            } else {
+                return new Promise((resolve, reject) => {
+                    const transaction = db.transaction([STORE_NAME], 'readwrite');
+                    const store = transaction.objectStore(STORE_NAME);
+                    const request = store.delete(id);
+
+                    request.onsuccess = () => resolve();
+                    request.onerror = () => reject(request.error);
+                });
+            }
+        }
+
+        // === 画像処理 ===
+        async function handleImage(file) {
+            if (!file || !file.type.startsWith('image/')) {
+                showMessage('画像ファイルを選択してください', 'error');
+                return;
+            }
+
+            // 配列に追加
+            problemImageBlobs.push(file);
+            renderProblemImages();
+
+            // UI更新
+            const prompt = document.getElementById('dropZonePrompt');
+            const dropZone = document.getElementById('dropZone');
+            const clearBtn = document.getElementById('clearImageBtn');
+            const analyzeBtn = document.getElementById('analyzeBtn');
+
+            prompt.classList.add('hidden');
+            dropZone.classList.add('has-image');
+            clearBtn.classList.remove('hidden');
+            analyzeBtn.classList.remove('hidden');
+        }
+
+        // === 問題画像ギャラリー描画 ===
+        function renderProblemImages() {
+            const gallery = document.getElementById('imageGallery');
+            gallery.innerHTML = '';
+
+            if (problemImageBlobs.length === 0) {
+                gallery.classList.add('hidden');
+                document.getElementById('dropZonePrompt').classList.remove('hidden');
+                document.getElementById('dropZone').classList.remove('has-image');
+                document.getElementById('clearImageBtn').classList.add('hidden');
+                document.getElementById('analyzeBtn').classList.add('hidden');
+                return;
+            }
+
+            gallery.classList.remove('hidden');
+
+            problemImageBlobs.forEach((blob, index) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const div = document.createElement('div');
+                    div.className = 'relative group border rounded-lg overflow-hidden shadow-sm bg-gray-50';
+                    div.innerHTML = `
+                        <img src="${e.target.result}" class="w-full h-40 object-contain p-2">
+                        <div class="absolute top-0 right-0 bg-red-600 text-white rounded-bl-lg p-1 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
+                             onclick="removeProblemImage(${index})">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </div>
+                        <div class="absolute bottom-0 left-0 bg-indigo-600 text-white text-xs px-2 py-1 rounded-tr-lg">
+                            Page ${index + 1}
+                        </div>
+                    `;
+                    gallery.appendChild(div);
+                };
+                reader.readAsDataURL(blob);
+            });
+        }
+
+        // === 個別の問題画像を削除 ===
+        function removeProblemImage(index) {
+            problemImageBlobs.splice(index, 1);
+            renderProblemImages();
+        }
+
+        // === 全画像をクリア ===
+        function clearImage() {
+            problemImageBlobs = [];
+            renderProblemImages();
+            document.getElementById('aiSuggestBadge').classList.add('hidden');
+        }
+
+        /* 以下の古い関数は削除または置換されました
+        // === 画像処理 ===
+        async function handleImage(file) { ...Old implementation... }
+        */
+
+        // === Gemini APIで画像分析 ===
+        async function analyzeImageWithGemini(imageDataUrl) {
+            if (isAnalyzing) return;
+
+            // プルダウンで選択したキーまたはlocalStorageから取得
+            const apiKeySelect = document.getElementById('apiKeySelect');
+            const apiKey = apiKeySelect?.value || localStorage.getItem('gemini_api_key') || '';
+            if (!apiKey) {
+                showMessage('APIキーを設定画面から選択または追加してください', 'error');
+                return;
+            }
+
+            isAnalyzing = true;
+
+            const dropZone = document.getElementById('dropZone');
+            const aiSuggestBadge = document.getElementById('aiSuggestBadge');
+
+            // 分析中のオーバーレイを表示
+            const overlay = document.createElement('div');
+            overlay.id = 'analyzingOverlay';
+            overlay.className = 'analyzing-overlay';
+            overlay.innerHTML = `
+                <div class="analyzing-spinner"></div>
+                <p class="mt-4 text-indigo-700 font-medium">🤖 Gemini AIで分析中...</p>
+                <p class="text-sm text-gray-500">学年・単元・キーワードを推定しています</p>
+            `;
+            dropZone.style.position = 'relative';
+            dropZone.appendChild(overlay);
+
+            try {
+                // Base64データを抽出
+                const base64Data = imageDataUrl.split(',')[1];
+                const mimeType = imageDataUrl.split(';')[0].split(':')[1];
+
+                // Gemini APIリクエスト (Gemini 3 Flash に戻す)
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [
+                                {
+                                    text: `この画像は日本の中学校理科の試験問題です。画像を分析して、以下の情報を推定してください。
+
+必ず以下のJSON形式で回答してください：
+{
+  "grade": "1" または "2" または "3" (中学何年生の内容か),
+  "unit": "単元名",
+  "keywords": ["キーワード1", "キーワード2", "キーワード3", ...]
+}
+
+重要：
+- grade は "1", "2", "3" のいずれかの文字列
+- unit は日本の中学校理科の単元名（例：植物の分類、電気回路、化学変化と質量、など）
+- keywords は問題に関連する重要な用語（最大10個）
+
+JSON以外のテキストは出力しないでください。`
+                                },
+                                {
+                                    inline_data: {
+                                        mime_type: mimeType,
+                                        data: base64Data
+                                    }
+                                }
+                            ]
+                        }]
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || 'API呼び出しに失敗しました');
+                }
+
+                const data = await response.json();
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+                console.log('Gemini応答:', text);
+
+                // JSONをパース
+                const jsonMatch = text.match(/\{[\s\S]*\}/);
+                if (jsonMatch) {
+                    const suggestion = JSON.parse(jsonMatch[0]);
+
+                    // フォームに自動入力
+                    if (suggestion.grade) {
+                        const gradeRadio = document.querySelector(`input[name="grade"][value="${suggestion.grade}"]`);
+                        if (gradeRadio) gradeRadio.checked = true;
+                    }
+                    if (suggestion.unit) {
+                        document.getElementById('unitInput').value = suggestion.unit;
+                    }
+                    if (suggestion.keywords && suggestion.keywords.length > 0) {
+                        document.getElementById('keywordsInput').value = suggestion.keywords.join(',');
+                    }
+
+                    // AI提案バッジを表示
+                    aiSuggestBadge.classList.remove('hidden');
+                    showMessage('✨ AIが学年・単元・キーワードを提案しました', 'success');
+                } else {
+                    throw new Error('AIの応答を解析できませんでした');
+                }
+
+            } catch (error) {
+                console.error('Gemini APIエラー:', error);
+                showMessage('AI分析に失敗しました: ' + error.message, 'error');
+            } finally {
+                // オーバーレイを削除
+                const existingOverlay = document.getElementById('analyzingOverlay');
+                if (existingOverlay) existingOverlay.remove();
+                isAnalyzing = false;
+            }
+        }
+
+        // === 解説生成機能 (OCR + Gemini) ===
+        async function generateExplanationWithAI() {
+            if (problemImageBlobs.length === 0) {
+                showMessage('先に問題画像を登録してください', 'error');
+                return;
+            }
+
+            // プルダウンで選択したキーまたはlocalStorageから取得
+            const apiKeySelect2 = document.getElementById('apiKeySelect');
+            const apiKey = apiKeySelect2?.value || localStorage.getItem('gemini_api_key') || '';
+            if (!apiKey) {
+                showMessage('APIキーを設定画面から選択または追加してください', 'error');
+                return;
+            }
+
+            // 解説エリアにオーバーレイ表示
+            const expDropZone = document.getElementById('explanationDropZone');
+            const overlay = document.createElement('div');
+            overlay.id = 'expAnalyzingOverlay';
+            overlay.className = 'analyzing-overlay';
+            overlay.innerHTML = `
+                <div class="analyzing-spinner"></div>
+                <p class="mt-4 text-indigo-700 font-medium">✨ AIが解説を作成中...</p>
+            `;
+            expDropZone.style.position = 'relative';
+            expDropZone.appendChild(overlay);
+
+            try {
+                // 1枚目の画像をBase64化
+                const blob = problemImageBlobs[0];
+                const reader = new FileReader();
+                const base64Data = await new Promise((resolve) => {
+                    reader.onload = (e) => resolve(e.target.result.split(',')[1]);
+                    reader.readAsDataURL(blob);
+                });
+
+
+                // ユーザー指示の取得
+                const userInstruction = document.getElementById('aiInstructionInput').value.trim();
+                const instructionText = userInstruction ? `\n\n追加指示：\n${userInstruction}` : '';
+
+                // Gemini API リクエスト
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [
+                                {
+                                    text: `あなたは中学校理科の先生です。この問題画像を分析し、中学生に分かりやすい解説を作成してください。${instructionText}
+                                    
+以下のルールに従ってください：
+1. **正解**を最初に明記する。
+2. なぜその答えになるのか、**理由**や**考え方の手順**を丁寧に説明する。
+3. 関連する重要語句があれば補足する。
+4. 文字数は300文字程度で、簡潔にまとめる。
+5. 出力はプレーンテキストのみ（Markdown等は不要）。`
+                                },
+                                {
+                                    inline_data: {
+                                        mime_type: blob.type || 'image/png', // typeがない場合のフォールバック
+                                        data: base64Data
+                                    }
+                                }
+                            ]
+                        }]
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`API Error: ${response.status} - ${errorText}`);
+                }
+
+                const data = await response.json();
+                const explanationText = data.candidates[0].content.parts[0].text;
+
+                // テキストを画像に変換
+                const imageBlob = await textToImage(explanationText);
+
+                // 解説画像としてセット
+                explanationImageBlobs.push(imageBlob);
+                renderExplanationImages();
+
+                showMessage('解説を生成しました', 'success');
+
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('解説生成に失敗しました: ' + error.message, 'error');
+            } finally {
+                const overlay = document.getElementById('expAnalyzingOverlay');
+                if (overlay) overlay.remove();
+                expDropZone.style.position = '';
+            }
+        }
+
+        // === テキストを画像データ(Blob)に変換するヘルパー ===
+        function textToImage(text) {
+            return new Promise((resolve) => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                // キャンバス設定
+                const width = 800; // A4幅相当の高画質
+                const padding = 40;
+                const lineHeight = 35;
+                const fontSize = 24;
+
+                // フォント設定
+                ctx.font = `${fontSize}px "Noto Sans JP", sans-serif`;
+
+                // テキストの折り返し計算
+                const words = text.split('');
+                let line = '';
+                const lines = [];
+                const maxWidth = width - (padding * 2);
+
+                for (let n = 0; n < words.length; n++) {
+                    // 改行コードの処理
+                    if (words[n] === '\\n') {
+                        lines.push(line);
+                        line = '';
+                        continue;
+                    }
+
+                    const testLine = line + words[n];
+                    const metrics = ctx.measureText(testLine);
+                    const testWidth = metrics.width;
+
+                    if (testWidth > maxWidth && n > 0) {
+                        lines.push(line);
+                        line = words[n];
+                    } else {
+                        line = testLine;
+                    }
+                }
+                lines.push(line);
+
+                // 高さ計算
+                const height = (lines.length * lineHeight) + (padding * 2);
+
+                // キャンバスサイズ確定
+                canvas.width = width;
+                canvas.height = height;
+
+                // 背景色（白）
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, width, height);
+
+                // 文字描画（黒）
+                ctx.fillStyle = '#333333';
+                ctx.font = `${fontSize}px "Noto Sans JP", sans-serif`; // リセットされた場合のため再設定
+                ctx.textBaseline = 'top';
+
+                let y = padding;
+                for (let i = 0; i < lines.length; i++) {
+                    ctx.fillText(lines[i], padding, y);
+                    y += lineHeight;
+                }
+
+                // Blobに変換
+                canvas.toBlob((blob) => {
+                    resolve(blob);
+                }, 'image/png');
+            });
+        }
+
+
+
+        // === メッセージ表示 ===
+        function showMessage(text, type = 'success') {
+            const messageEl = document.getElementById('saveMessage');
+            messageEl.textContent = text;
+            messageEl.className = `mt-4 p-4 rounded-lg text-center font-medium cursor-pointer ${type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                }`;
+            messageEl.classList.remove('hidden');
+
+            // クリックで非表示
+            const hideMessage = () => {
+                messageEl.classList.add('hidden');
+                document.removeEventListener('click', hideMessage);
+            };
+            // 少し遅延させてから登録（保存ボタンのクリックイベントを無視するため）
+            setTimeout(() => {
+                document.addEventListener('click', hideMessage, { once: true });
+            }, 100);
+        }
+
+        // === 登録済み問題一覧を表示 ===
+        async function renderProblemList() {
+            const problems = await getAllProblems();
+            const listEl = document.getElementById('problemList');
+            const countEl = document.getElementById('problemCount');
+
+            countEl.textContent = `${problems.length} 件`;
+
+            if (problems.length === 0) {
+                listEl.innerHTML = '<p class="text-gray-500 text-center py-4">登録された問題はありません</p>';
+                return;
+            }
+
+            // 新しい順にソート
+            problems.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            listEl.innerHTML = problems.map(p => `
+    <div
+        class="problem-card bg-gray-50 p-4 rounded-lg border border-gray-200 transition-all duration-200 flex justify-between items-center cursor-pointer hover:bg-indigo-50"
+        onclick="showPreview('${p.id}')"
+        >
+        <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-medium">${p.id}</span>
+                <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">${p.year}年</span>
+                <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">${p.grade}年</span>
+            </div>
+            <h4 class="font-semibold text-gray-800">${p.unit}</h4>
+            <p class="text-xs text-gray-500 truncate">${p.keywords || 'キーワードなし'}</p>
+        </div>
+        <button onclick="event.stopPropagation(); handleDelete('${p.id}')" class="ml-4 text-red-500 hover:text-red-700 p-2" title="削除">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                </path>
+            </svg>
+        </button>
+    </div>
+    `).join('');
+        }
+
+        // === プレビュー表示 ===
+        async function showPreview(id) {
+            const problems = await getAllProblems();
+            const p = problems.find(prob => prob.id === id);
+            if (!p) return;
+
+            // モーダルを作成
+            const modal = document.createElement('div');
+            modal.id = 'previewModal';
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+            modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+
+            let imagesHtml = '';
+
+            // 問題画像: images (FileSystem URLs) > problemBlobs (IndexedDB array) > imageBlob (legacy)
+            if (p.images && p.images.length > 0) {
+                imagesHtml += `<div class="mb-4"><h4 class="font-semibold text-gray-700 mb-2">📄 問題</h4>`;
+                for (const url of p.images) {
+                    imagesHtml += `<img src="${url}" alt="問題" class="max-w-full max-h-[300px] object-contain rounded-lg border cursor-pointer mb-2" onclick="window.open('${url}', '_blank')">`;
+                }
+                imagesHtml += `</div>`;
+            } else if (p.problemBlobs && p.problemBlobs.length > 0) {
+                imagesHtml += `<div class="mb-4"><h4 class="font-semibold text-gray-700 mb-2">📄 問題</h4>`;
+                for (const blob of p.problemBlobs) {
+                    const url = URL.createObjectURL(blob);
+                    imagesHtml += `<img src="${url}" alt="問題" class="max-w-full max-h-[300px] object-contain rounded-lg border cursor-pointer mb-2" onclick="window.open('${url}', '_blank')">`;
+                }
+                imagesHtml += `</div>`;
+            } else if (p.imageBlob) {
+                const url = URL.createObjectURL(p.imageBlob);
+                imagesHtml += `
+                    <div class="mb-4">
+                        <h4 class="font-semibold text-gray-700 mb-2">📄 問題</h4>
+                        <img src="${url}" alt="問題" class="max-w-full max-h-[300px] object-contain rounded-lg border cursor-pointer" onclick="window.open('${url}', '_blank')">
+                    </div>
+                `;
+            }
+
+            // 解説画像: explanationImages (FileSystem URLs) > explanationBlobs > explanationBlob (legacy)
+            if (p.explanationImages && p.explanationImages.length > 0) {
+                imagesHtml += `<div class="mb-4"><h4 class="font-semibold text-gray-700 mb-2">📝 解説</h4>`;
+                for (const url of p.explanationImages) {
+                    imagesHtml += `<img src="${url}" alt="解説" class="max-w-full max-h-[200px] object-contain rounded-lg border cursor-pointer mb-2" onclick="window.open('${url}', '_blank')">`;
+                }
+                imagesHtml += `</div>`;
+            } else if (p.explanationBlobs && p.explanationBlobs.length > 0) {
+                imagesHtml += `<div class="mb-4"><h4 class="font-semibold text-gray-700 mb-2">📝 解説</h4>`;
+                for (const blob of p.explanationBlobs) {
+                    const url = URL.createObjectURL(blob);
+                    imagesHtml += `<img src="${url}" alt="解説" class="max-w-full max-h-[200px] object-contain rounded-lg border cursor-pointer mb-2" onclick="window.open('${url}', '_blank')">`;
+                }
+                imagesHtml += `</div>`;
+            } else if (p.explanationBlob) {
+                const url = URL.createObjectURL(p.explanationBlob);
+                imagesHtml += `
+                    <div class="mb-4">
+                        <h4 class="font-semibold text-gray-700 mb-2">📝 解説</h4>
+                        <img src="${url}" alt="解説" class="max-w-full max-h-[200px] object-contain rounded-lg border cursor-pointer" onclick="window.open('${url}', '_blank')">
+                    </div>
+                `;
+            }
+
+            // 解答画像: answerImage (FileSystem URL) > answerBlob
+            if (p.answerImage && typeof p.answerImage === 'string') {
+                imagesHtml += `
+                    <div class="mb-4">
+                        <h4 class="font-semibold text-gray-700 mb-2">✅ 解答</h4>
+                        <img src="${p.answerImage}" alt="解答" class="max-w-full max-h-[200px] object-contain rounded-lg border cursor-pointer" onclick="window.open('${p.answerImage}', '_blank')">
+                    </div>
+                `;
+            } else if (p.answerBlob) {
+                const url = URL.createObjectURL(p.answerBlob);
+                imagesHtml += `
+                    <div class="mb-4">
+                        <h4 class="font-semibold text-gray-700 mb-2">✅ 解答</h4>
+                        <img src="${url}" alt="解答" class="max-w-full max-h-[200px] object-contain rounded-lg border cursor-pointer" onclick="window.open('${url}', '_blank')">
+                    </div>
+                `;
+            }
+
+            modal.innerHTML = `
+                <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">${p.id}: ${p.unit}</h3>
+                        <button onclick="document.getElementById('previewModal').remove()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                    </div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-sm bg-blue-100 text-blue-700 px-2 py-1 rounded">${p.year}年</span>
+                        <span class="text-sm bg-green-100 text-green-700 px-2 py-1 rounded">${p.grade}年生</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-4">キーワード: ${p.keywords || 'なし'}</p>
+                    <hr class="my-4">
+                    ${imagesHtml || '<p class="text-gray-500">画像がありません</p>'}
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+        }
+
+        // === 削除処理 ===
+        async function handleDelete(id) {
+            if (!confirm(`問題 ${id} を削除しますか？`)) return;
+
+            try {
+                await deleteProblem(id);
+                showMessage('削除しました', 'success');
+                await renderProblemList();
+            } catch (error) {
+                showMessage('削除に失敗しました: ' + error.message, 'error');
+            }
+        }
+
+        // === フォームリセット ===
+        function resetForm() {
+            clearImage();
+            clearExplanationImage();
+            clearAnswerImage();
+            document.getElementById('yearSelect').value = '';
+            document.querySelectorAll('input[name="grade"]').forEach(r => r.checked = false);
+            const defaultPage = document.querySelector('input[name="pageCount"][value="1"]');
+            if (defaultPage) defaultPage.checked = true;
+            document.getElementById('unitInput').value = '';
+            document.getElementById('keywordsInput').value = '';
+            document.getElementById('commentInput').value = '';
+        }
+
+        // === 解説画像クリア ===
+        function clearExplanationImage() {
+            explanationImageBlobs = [];
+            renderExplanationImages();
+        }
+
+        // === 解答画像クリア ===
+        function clearAnswerImage() {
+            answerImageBlob = null;
+            const preview = document.getElementById('answerPreview');
+            const prompt = document.getElementById('answerDropZonePrompt');
+            const dropZone = document.getElementById('answerDropZone');
+            const clearBtn = document.getElementById('clearAnswerBtn');
+
+            if (preview) {
+                preview.src = '';
+                preview.classList.add('hidden');
+            }
+            if (prompt) prompt.classList.remove('hidden');
+            if (dropZone) dropZone.classList.remove('has-image');
+            if (clearBtn) clearBtn.classList.add('hidden');
+        }
+
+        // === 解説画像処理 ===
+        function handleExplanationImage(file) {
+            if (!file || !file.type.startsWith('image/')) return;
+
+            explanationImageBlobs.push(file);
+            renderExplanationImages();
+        }
+
+        // === 解説画像ギャラリー描画 ===
+        function renderExplanationImages() {
+            const gallery = document.getElementById('explanationGallery');
+            const prompt = document.getElementById('explanationDropZonePrompt');
+            const dropZone = document.getElementById('explanationDropZone');
+            const clearBtn = document.getElementById('clearExplanationBtn');
+
+            gallery.innerHTML = '';
+
+            if (explanationImageBlobs.length === 0) {
+                gallery.classList.add('hidden');
+                prompt.classList.remove('hidden');
+                dropZone.classList.remove('has-image');
+                clearBtn.classList.add('hidden');
+                return;
+            }
+
+            gallery.classList.remove('hidden');
+            prompt.classList.add('hidden');
+            dropZone.classList.add('has-image');
+            clearBtn.classList.remove('hidden');
+
+            explanationImageBlobs.forEach((blob, index) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const div = document.createElement('div');
+                    div.className = 'relative group border rounded-lg overflow-hidden shadow-sm bg-gray-50';
+                    div.innerHTML = `
+                        <img src="${e.target.result}" class="w-full h-32 object-contain p-1">
+                        <div class="absolute top-0 right-0 bg-red-600 text-white rounded-bl-lg p-1 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
+                             onclick="removeExplanationImage(${index})">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </div>
+                    `;
+                    gallery.appendChild(div);
+                };
+                reader.readAsDataURL(blob);
+            });
+        }
+
+        // === 個別の解説画像を削除 ===
+        function removeExplanationImage(index) {
+            explanationImageBlobs.splice(index, 1);
+            renderExplanationImages();
+        }
+
+        // === 解答画像処理 ===
+        function handleAnswerImage(file) {
+            if (!file || !file.type.startsWith('image/')) return;
+
+            answerImageBlob = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const preview = document.getElementById('answerPreview');
+                const prompt = document.getElementById('answerDropZonePrompt');
+                const dropZone = document.getElementById('answerDropZone');
+                const clearBtn = document.getElementById('clearAnswerBtn');
+
+                preview.src = e.target.result;
+                preview.classList.remove('hidden');
+                prompt.classList.add('hidden');
+                dropZone.classList.add('has-image');
+                clearBtn.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // === 保存処理 ===
+        async function handleSave() {
+            // バリデーション
+            if (problemImageBlobs.length === 0) {
+                showMessage('画像を1枚以上貼り付けてください', 'error');
+                return;
+            }
+
+            const year = document.getElementById('yearSelect').value;
+            // 年度は任意（不明の場合は空文字）
+
+            const month = document.getElementById('monthSelect').value;
+            // 月は任意扱いにするか、必須にするか。要望では「月も入れられるように」とあるので任意または必須。
+            // 既存データとの互換性を考えて、未選択なら空文字またはnullを許容する方針とするが、
+            // 今後の検索のためには値があったほうがよい。ここでは必須にはしないが、保存はする。
+
+            const testType = document.getElementById('testTypeSelect').value;
+            if (!testType) {
+                showMessage('問題種別を選択してください', 'error');
+                return;
+            }
+
+            const gradeEl = document.querySelector('input[name="grade"]:checked');
+            if (!gradeEl) {
+                showMessage('履修学年を選択してください', 'error');
+                return;
+            }
+
+            const unit = document.getElementById('unitInput').value.trim();
+            if (!unit) {
+                showMessage('単元名を入力してください', 'error');
+                return;
+            }
+
+            const keywords = document.getElementById('keywordsInput').value.trim();
+            const comment = document.getElementById('commentInput').value.trim();
+
+            try {
+                // 編集モードなら既存ID、新規なら自動採番
+                const editingId = document.getElementById('saveBtn').dataset.editingId;
+                const id = editingId ? editingId : await getNextId();
+                const problemData = {
+                    id: id,
+                    grade: gradeEl.value,
+                    unit: unit,
+                    keywords: keywords,
+                    year: year,
+                    month: month, // 追加
+                    testType: testType, // 追加
+                    comment: comment, // 追加
+                    imageBlob: problemImageBlobs[0], // 互換性のため1枚目を維持
+                    problemBlobs: problemImageBlobs, // 新しく配列を保存
+                    explanationBlob: explanationImageBlobs.length > 0 ? explanationImageBlobs[0] : null, // 互換性用
+                    explanationBlobs: explanationImageBlobs, // 新しく配列を保存
+                    answerBlob: answerImageBlob,
+                    pageCount: document.querySelector('input[name="pageCount"]:checked')?.value || '1',
+                    createdAt: new Date().toISOString()
+                };
+
+                await saveProblem(problemData);
+                showMessage(`${id} を保存しました！`, 'success');
+                resetForm();
+                await renderProblemList();
+            } catch (error) {
+                showMessage('保存に失敗しました: ' + error.message, 'error');
+            }
+        }
+
+        // === 初期化 ===
+        window.onload = async function () {
+            // IndexedDB初期化
+            await initDB();
+
+            // 保存済みフォルダハンドルを復元
+            await restoreDirectoryHandle();
+            updateStorageStatus();
+
+            // フォルダ選択ボタンのイベントリスナー
+            document.getElementById('selectFolderBtn').addEventListener('click', selectFolder);
+
+            // 設定保存ボタンのイベントリスナー
+            document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
+
+            // 編集モード判定
+            const urlParams = new URLSearchParams(window.location.search);
+            const editId = urlParams.get('edit');
+            if (editId) {
+                // 少し待ってから実行（DOM描画安定のため）
+                setTimeout(() => loadForEdit(editId), 100);
+            }
+
+            // === 複数APIキー管理 ===
+            const apiKeySelect = document.getElementById('apiKeySelect');
+            const apiKeyInput = document.getElementById('apiKeyInput');
+            const addApiKeyBtn = document.getElementById('addApiKeyBtn');
+            const deleteApiKeyBtn = document.getElementById('deleteApiKeyBtn');
+            const toggleApiKeyBtn = document.getElementById('toggleApiKeyBtn');
+
+            // APIキーリストを取得（古い形式からの移行も対応）
+            function getApiKeys() {
+                let keys = JSON.parse(localStorage.getItem('gemini_api_keys') || '[]');
+                // 古い単一キー形式からの移行
+                const oldKey = localStorage.getItem('gemini_api_key');
+                if (oldKey && !keys.includes(oldKey)) {
+                    keys.push(oldKey);
+                    localStorage.setItem('gemini_api_keys', JSON.stringify(keys));
+                }
+                return keys;
+            }
+
+            // 現在選択中のキーを取得
+            function getSelectedApiKey() {
+                return localStorage.getItem('gemini_api_key_selected') || '';
+            }
+
+            // プルダウンを更新
+            function updateApiKeySelect() {
+                const keys = getApiKeys();
+                const selected = getSelectedApiKey();
+                apiKeySelect.innerHTML = '<option value="">-- 保存済みキーを選択 --</option>';
+                keys.forEach((key, index) => {
+                    const option = document.createElement('option');
+                    option.value = key;
+                    // キーを短縮表示（最初と最後の数文字のみ）
+                    const displayKey = key.length > 20
+                        ? key.substring(0, 10) + '...' + key.substring(key.length - 6)
+                        : key;
+                    option.textContent = `${index + 1}. ${displayKey}`;
+                    if (key === selected) {
+                        option.selected = true;
+                    }
+                    apiKeySelect.appendChild(option);
+                });
+            }
+
+            // 初期化
+            updateApiKeySelect();
+
+            // プルダウンでキー選択時
+            apiKeySelect.addEventListener('change', () => {
+                const selectedKey = apiKeySelect.value;
+                localStorage.setItem('gemini_api_key_selected', selectedKey);
+                // 互換性のため古い形式にも保存
+                localStorage.setItem('gemini_api_key', selectedKey);
+            });
+
+            // 新しいキーを追加
+            addApiKeyBtn.addEventListener('click', () => {
+                const newKey = apiKeyInput.value.trim();
+                if (!newKey) {
+                    alert('APIキーを入力してください');
+                    return;
+                }
+                let keys = getApiKeys();
+                if (keys.includes(newKey)) {
+                    alert('このAPIキーは既に保存されています');
+                    return;
+                }
+                keys.push(newKey);
+                localStorage.setItem('gemini_api_keys', JSON.stringify(keys));
+                localStorage.setItem('gemini_api_key_selected', newKey);
+                localStorage.setItem('gemini_api_key', newKey);
+                updateApiKeySelect();
+                apiKeyInput.value = '';
+                alert('APIキーを追加しました');
+            });
+
+            // 選択中のキーを削除
+            deleteApiKeyBtn.addEventListener('click', () => {
+                const selectedKey = apiKeySelect.value;
+                if (!selectedKey) {
+                    alert('削除するキーを選択してください');
+                    return;
+                }
+                if (!confirm('選択中のAPIキーを削除しますか？')) {
+                    return;
+                }
+                let keys = getApiKeys();
+                keys = keys.filter(k => k !== selectedKey);
+                localStorage.setItem('gemini_api_keys', JSON.stringify(keys));
+                localStorage.setItem('gemini_api_key_selected', '');
+                localStorage.setItem('gemini_api_key', '');
+                updateApiKeySelect();
+            });
+
+            // APIキー表示/非表示切り替え
+            toggleApiKeyBtn.addEventListener('click', () => {
+                if (apiKeyInput.type === 'password') {
+                    apiKeyInput.type = 'text';
+                    toggleApiKeyBtn.textContent = '🙈 隠す';
+                } else {
+                    apiKeyInput.type = 'password';
+                    toggleApiKeyBtn.textContent = '👁️ 表示';
+                }
+            });
+
+            // === メタデータ初期化 (年・月・問題種別) ===
+            const yearSelect = document.getElementById('yearSelect');
+            const monthSelect = document.getElementById('monthSelect');
+            const testTypeSelect = document.getElementById('testTypeSelect');
+
+            // 1. 出題年度 (2020 〜 現在+1年度)
+            const currentYear = new Date().getFullYear();
+            for (let year = currentYear + 1; year >= 2020; year--) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = `${year}年度`;
+                yearSelect.appendChild(option);
+            }
+
+            // 2. 保存された値の復元
+            const savedYear = localStorage.getItem('selected_year');
+            if (savedYear) yearSelect.value = savedYear;
+
+            const savedMonth = localStorage.getItem('selected_month');
+            if (savedMonth) monthSelect.value = savedMonth;
+
+            // 3. 値変更時の保存
+            yearSelect.addEventListener('change', (e) => localStorage.setItem('selected_year', e.target.value));
+            monthSelect.addEventListener('change', (e) => localStorage.setItem('selected_month', e.target.value));
+            testTypeSelect.addEventListener('change', (e) => localStorage.setItem('selected_test_type', e.target.value));
+
+            // 4. 問題種別の管理
+            const DEFAULT_TEST_TYPES = ['学力テスト', '基礎学力テスト'];
+            let testTypes = JSON.parse(localStorage.getItem('test_types') || JSON.stringify(DEFAULT_TEST_TYPES));
+
+            function renderTestTypes() {
+                // セレクトボックス更新
+                const currentVal = testTypeSelect.value;
+                testTypeSelect.innerHTML = ''; // クリア
+                testTypes.forEach(type => {
+                    const option = document.createElement('option');
+                    option.value = type;
+                    option.textContent = type;
+                    testTypeSelect.appendChild(option);
+                });
+
+                // 選択状態の復元（もしリスト内にあれば）
+                const savedType = localStorage.getItem('selected_test_type');
+                if (savedType && testTypes.includes(savedType)) {
+                    testTypeSelect.value = savedType;
+                } else if (currentVal && testTypes.includes(currentVal)) {
+                    testTypeSelect.value = currentVal;
+                }
+
+                // モーダル内のリスト更新
+                const listEl = document.getElementById('testTypeList');
+                listEl.innerHTML = testTypes.map((type, index) => `
+                    <li class="flex justify-between items-center bg-gray-50 p-2 rounded">
+                        <span>${type}</span>
+                        <button onclick="deleteTestType(${index})" class="text-red-500 hover:text-red-700 text-sm">削除</button>
+                    </li>
+                `).join('');
+            }
+
+            // 初期描画
+            renderTestTypes();
+
+            // === 問題種別編集モーダル制御 ===
+            const testTypeModal = document.getElementById('testTypeModal');
+            document.getElementById('editTestTypesBtn').addEventListener('click', () => testTypeModal.showModal());
+            document.getElementById('closeTestTypeModalBtn').addEventListener('click', () => testTypeModal.close());
+
+            // 追加処理
+            document.getElementById('addTestTypeBtn').addEventListener('click', () => {
+                const input = document.getElementById('newTestTypeInput');
+                const val = input.value.trim();
+                if (val && !testTypes.includes(val)) {
+                    testTypes.push(val);
+                    localStorage.setItem('test_types', JSON.stringify(testTypes));
+                    renderTestTypes();
+                    input.value = '';
+                }
+            });
+
+            // 削除処理（グローバル関数として定義）
+            window.deleteTestType = function (index) {
+                if (confirm('この種別を削除しますか？')) {
+                    testTypes.splice(index, 1);
+                    localStorage.setItem('test_types', JSON.stringify(testTypes));
+                    renderTestTypes();
+                }
+            };
+
+            // 単元のサジェストを生成（既知の単元リスト）
+            const knownUnits = [
+                '観察器具の操作', '種子植物の生殖', '胞子で増える植物', '被子植物の根と葉',
+                '脊椎動物の分類', '無脊椎動物の分類', '物質の性質と密度', '気体の性質と集め方',
+                '溶解度と再結晶', '状態変化と蒸留', '光の反射・屈折', '凸レンズによる像',
+                '力のつり合い', '火山と火成岩', '地震', '地層のでき方と堆積岩',
+                '物質の分解', '酸化と還元', '化学変化と質量', '生物と細胞',
+                '光合成と呼吸', '消化と吸収', '血液の循環', '刺激と反応',
+                '電気回路', '電力と電力量', '磁界と電磁誘導', '原子とイオン',
+                '酸とアルカリ', '中和と塩', '細胞分裂', '遺伝の規則性',
+                '物体の運動', '仕事とエネルギー', '天体の動き', '月と金星'
+            ];
+            const datalist = document.getElementById('unitSuggestions');
+            knownUnits.forEach(unit => {
+                const option = document.createElement('option');
+                option.value = unit;
+                datalist.appendChild(option);
+            });
+
+            // イベントリスナー設定
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+
+            // ダブルクリックでファイル選択
+            dropZone.addEventListener('dblclick', () => fileInput.click());
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files[0]) handleImage(e.target.files[0]);
+            });
+
+            // ドラッグ&ドロップ
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                if (e.dataTransfer.files[0]) handleImage(e.dataTransfer.files[0]);
+            });
+
+            // 貼り付け先の選択状態を管理
+            let activeDropTarget = 'problem'; // 'problem', 'explanation', 'answer'
+
+            // ドロップゾーンのクリックでフォーカス状態を更新
+            const allDropZones = [dropZone, document.getElementById('explanationDropZone'), document.getElementById('answerDropZone')];
+            allDropZones.forEach((zone, index) => {
+                const originalClick = zone.onclick;
+                zone.addEventListener('mousedown', () => {
+                    // フォーカス状態を更新
+                    activeDropTarget = ['problem', 'explanation', 'answer'][index];
+                    // 視覚的フィードバック
+                    allDropZones.forEach(z => z.classList.remove('ring-2', 'ring-indigo-500'));
+                    zone.classList.add('ring-2', 'ring-indigo-500');
+                });
+            });
+
+            // Ctrl+V で貼り付け（フォーカスに応じて切り替え）
+            document.addEventListener('paste', (e) => {
+                const items = e.clipboardData?.items;
+                if (!items) return;
+
+                for (const item of items) {
+                    if (item.type.startsWith('image/')) {
+                        const file = item.getAsFile();
+                        // フォーカスに応じて適切なハンドラを呼び出し
+                        if (activeDropTarget === 'explanation') {
+                            handleExplanationImage(file);
+                        } else if (activeDropTarget === 'answer') {
+                            handleAnswerImage(file);
+                        } else {
+                            handleImage(file);
+                        }
+                        break;
+                    }
+                }
+            });
+
+            // 画像クリアボタン
+            document.getElementById('clearImageBtn').addEventListener('click', clearImage);
+
+            // 保存ボタン
+            document.getElementById('saveBtn').addEventListener('click', handleSave);
+
+            // リセットボタン
+            document.getElementById('resetBtn').addEventListener('click', resetForm);
+
+            // 問題一覧を表示
+            await renderProblemList();
+
+            // === 解説画像のイベントリスナー ===
+            const explanationDropZone = document.getElementById('explanationDropZone');
+            const explanationFileInput = document.getElementById('explanationFileInput');
+
+            explanationDropZone.addEventListener('dblclick', () => explanationFileInput.click());
+            explanationFileInput.addEventListener('change', (e) => {
+                if (e.target.files[0]) handleExplanationImage(e.target.files[0]);
+            });
+            explanationDropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                explanationDropZone.classList.add('dragover');
+            });
+            explanationDropZone.addEventListener('dragleave', () => {
+                explanationDropZone.classList.remove('dragover');
+            });
+            explanationDropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                explanationDropZone.classList.remove('dragover');
+                if (e.dataTransfer.files[0]) handleExplanationImage(e.dataTransfer.files[0]);
+            });
+
+            // === 解答画像のイベントリスナー (以前欠落していた部分を追加) ===
+            const answerDropZone = document.getElementById('answerDropZone');
+            const answerFileInput = document.getElementById('answerFileInput');
+
+            answerDropZone.addEventListener('dblclick', () => answerFileInput.click());
+            answerFileInput.addEventListener('change', (e) => {
+                if (e.target.files[0]) handleAnswerImage(e.target.files[0]);
+            });
+            answerDropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                answerDropZone.classList.add('dragover');
+            });
+            answerDropZone.addEventListener('dragleave', () => {
+                answerDropZone.classList.remove('dragover');
+            });
+            answerDropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                answerDropZone.classList.remove('dragover');
+                if (e.dataTransfer.files[0]) handleAnswerImage(e.dataTransfer.files[0]);
+            });
+
+            // AI分析ボタン
+            document.getElementById('analyzeBtn').addEventListener('click', () => {
+                if (problemImageBlobs.length > 0) {
+                    // 1枚目の画像で分析
+                    const reader = new FileReader();
+                    reader.onload = (e) => analyzeImageWithGemini(e.target.result);
+                    reader.readAsDataURL(problemImageBlobs[0]);
+                } else {
+                    showMessage('画像がありません', 'error');
+                }
+            });
+            // 解説AI生成実行
+            document.getElementById('generateExplanationBtn').addEventListener('click', generateExplanationWithAI);
+
+            document.getElementById('clearExplanationBtn').addEventListener('click', clearExplanationImage);
+
+            document.getElementById('clearAnswerBtn').addEventListener('click', clearAnswerImage);
+
+            // === モーダル制御 ===
+            const settingsModal = document.getElementById('settingsModal');
+            const openSettingsBtn = document.getElementById('openSettingsBtn');
+            const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+            const closeModalBtnFooter = document.getElementById('closeModalBtnFooter');
+
+            // 開く
+            openSettingsBtn.addEventListener('click', () => {
+                settingsModal.showModal();
+            });
+
+            // 閉じる
+            closeSettingsBtn.addEventListener('click', () => {
+                settingsModal.close();
+            });
+            closeModalBtnFooter.addEventListener('click', () => {
+                settingsModal.close();
+            });
+
+            // 枠外クリックで閉じる
+            settingsModal.addEventListener('click', (e) => {
+                const rect = settingsModal.getBoundingClientRect();
+                if (e.clientX < rect.left || e.clientX > rect.right ||
+                    e.clientY < rect.top || e.clientY > rect.bottom) {
+                    settingsModal.close();
+                }
+            });
+        };
+    </script>
+    <!-- 設定モーダル -->
+    <dialog id="settingsModal" class="p-0 rounded-xl shadow-2xl backdrop:bg-black/50 w-full max-w-2xl">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                    <span>⚙️</span> アプリ設定
+                </h2>
+                <button id="closeSettingsBtn"
+                    class="text-gray-400 hover:text-gray-600 rounded-lg p-1 hover:bg-gray-100 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="space-y-6">
+                <!-- APIキー設定 -->
+                <div class="bg-purple-50 rounded-xl p-4 border border-purple-200">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">🔑</span>
+                            <h3 class="text-base font-bold text-purple-800">Gemini API 設定</h3>
+                        </div>
+                        <a href="https://aistudio.google.com/app/apikey" target="_blank"
+                            class="text-xs text-purple-600 hover:text-purple-800 underline flex items-center gap-1">
+                            <span>🔗 APIキーを取得</span>
+                        </a>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-xs font-medium text-purple-700">
+                            APIキー（画像分析に使用）
+                        </label>
+                        <!-- 保存済みキー選択 -->
+                        <div class="flex gap-2 items-center">
+                            <select id="apiKeySelect"
+                                class="flex-1 px-3 py-2 border border-purple-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white text-sm">
+                                <option value="">-- 保存済みキーを選択 --</option>
+                            </select>
+                            <button id="deleteApiKeyBtn"
+                                class="px-3 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-sm font-medium"
+                                title="選択中のキーを削除">
+                                🗑️
+                            </button>
+                        </div>
+                        <!-- 新しいキー入力 -->
+                        <div class="flex gap-2 items-center">
+                            <input type="password" id="apiKeyInput" placeholder="新しいAPIキーを入力..."
+                                class="flex-1 px-3 py-2 border border-purple-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white text-sm">
+                            <button id="toggleApiKeyBtn"
+                                class="px-3 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors text-sm font-medium">
+                                👁️ 隠す
+                            </button>
+                            <button id="addApiKeyBtn"
+                                class="px-3 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors text-sm font-medium"
+                                title="キーを保存">
+                                ➕ 追加
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-purple-600 mt-2">
+                        ※ APIキーはブラウザに保存されます。プルダウンから過去のキーを選択できます。
+                    </p>
+                </div>
+
+                <!-- 保存先設定 -->
+                <div class="bg-blue-50 rounded-xl p-4 border border-blue-200">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">📂</span>
+                            <h3 class="text-base font-bold text-gray-800">データ保存先設定</h3>
+                        </div>
+                        <div id="storageStatus"
+                            class="text-xs font-medium px-2 py-1 rounded-full bg-white text-gray-600 border border-gray-200 shadow-sm">
+                            ブラウザ内保存
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-600 mb-3 leading-relaxed">
+                        大量のデータを扱う場合は、ローカルフォルダへの保存を推奨します。<br>
+                        ボタンを押してデータを保存する空のフォルダを指定してください。
+                    </p>
+                    <div class="flex gap-3">
+                        <button id="selectFolderBtn"
+                            class="bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-sm">
+                            <span>📁</span> フォルダを選択
+                        </button>
+                        <div id="folderPathDisplay"
+                            class="flex-1 bg-white border border-blue-300 rounded-lg px-3 py-2 text-xs text-gray-500 flex items-center overflow-hidden whitespace-nowrap">
+                            未選択 (IndexedDB)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end gap-3">
+                <button id="saveSettingsBtn"
+                    class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium transition-colors flex items-center gap-2">
+                    💾 設定を保存
+                </button>
+                <button id="closeModalBtnFooter"
+                    class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-medium transition-colors">
+                    閉じる
+                </button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- 設定モーダル（既存）の後に配置 -->
+    <!-- 問題種別編集モーダル -->
+    <dialog id="testTypeModal" class="p-0 rounded-xl shadow-2xl backdrop:bg-black/50 w-full max-w-sm">
+        <div class="p-6">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">問題種別の編集</h3>
+            <ul id="testTypeList" class="space-y-2 mb-4 max-h-[200px] overflow-y-auto">
+                <!-- リスト動的生成 -->
+            </ul>
+            <div class="flex gap-2">
+                <input type="text" id="newTestTypeInput" placeholder="新しい種別名"
+                    class="flex-1 px-3 py-2 border rounded-lg text-sm">
+                <button id="addTestTypeBtn" class="bg-indigo-600 text-white px-3 py-2 rounded-lg text-sm">追加</button>
+            </div>
+            <div class="mt-6 flex justify-end">
+                <button id="closeTestTypeModalBtn"
+                    class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm">閉じる</button>
+            </div>
+        </div>
+    </dialog>
+</body>
+
+</html>
