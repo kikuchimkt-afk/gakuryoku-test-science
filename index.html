@@ -5892,16 +5892,23 @@
                 bar.id = 'collectionFloatingBar';
                 bar.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-4 z-50 transition-all duration-300 translate-y-24';
                 bar.innerHTML = `
-                    <span id="collectionCount" class="font-bold">0件を選択中</span>
-                    <button onclick="generateCollectedPDF()" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-1.5 rounded-full text-sm font-bold transition-colors">
-                        一括PDF作成
-                    </button>
-                    <button onclick="deleteSelectedProblems()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-full text-sm font-bold transition-colors">
-                        🗑️ 選択削除
-                    </button>
-                    <button onclick="clearCollection()" class="text-gray-400 hover:text-white text-sm">
-                        解除
-                    </button>
+                    <div class="flex flex-col gap-1 mr-2">
+                        <span id="collectionCount" class="font-bold text-sm">0件を選択中</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="generateCollectedPDF(false)" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-1.5 rounded-full text-sm font-bold transition-colors">
+                            PDF作成
+                        </button>
+                        <button onclick="generateCollectedPDF(true)" class="bg-teal-500 hover:bg-teal-600 text-white px-4 py-1.5 rounded-full text-sm font-bold transition-colors" title="A4横・2面割付・短辺とじ">
+                            A4横 2面印刷
+                        </button>
+                        <button onclick="deleteSelectedProblems()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-full text-sm font-bold transition-colors">
+                            🗑️ 削除
+                        </button>
+                        <button onclick="clearCollection()" class="text-gray-400 hover:text-white text-sm ml-2">
+                            解除
+                        </button>
+                    </div>
                 `;
                 document.body.appendChild(bar);
             }
@@ -6253,9 +6260,12 @@
                              <a href="問題登録.html?edit=${doc.id}" target="_blank" class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-600 transition-colors shadow-sm flex items-center gap-2">
                                 ✏️ 編集
                             </a>
-                            <button onclick="generatePDF('${doc.id}')" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-indigo-700 transition-colors shadow-sm flex items-center gap-2">
+                            <button onclick="generatePDF('${doc.id}', false)" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-indigo-700 transition-colors shadow-sm flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                 PDF作成
+                            </button>
+                            <button onclick="generatePDF('${doc.id}', true)" class="bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-teal-700 transition-colors shadow-sm flex items-center gap-2" title="A4横・2面割付">
+                                2面印刷
                             </button>
                             <button onclick="deleteProblem('${doc.id}')" class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-red-700 transition-colors shadow-sm flex items-center gap-2">
                                 🗑️ 削除
@@ -6305,9 +6315,14 @@
 
                 detailViewer.innerHTML = `
                     <div class="mb-4">
-                        <a href="${pdfPath}" target="_blank" class="block w-full text-center bg-green-600 text-white py-2 px-4 rounded-lg font-semibold shadow-md hover:bg-green-700 transition-colors mb-2">
-                            [問題] PDFを別ウィンドウで開く
-                        </a>
+                        <div class="flex gap-2 mb-2">
+                            <a href="${pdfPath}" target="_blank" class="flex-1 text-center bg-green-600 text-white py-2 px-4 rounded-lg font-semibold shadow-md hover:bg-green-700 transition-colors">
+                                [問題] PDFを別ウィンドウ
+                            </a>
+                            <button onclick="generatePDF('${doc.id}', true)" class="bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-teal-700 transition-colors shadow-sm flex items-center gap-2" title="A4横・2面割付">
+                                2面印刷
+                            </button>
+                        </div>
                         <div class="w-full h-[600px] border border-gray-300 rounded-lg bg-gray-100 overflow-hidden">
                             <iframe src="${pdfPath}" class="w-full h-full" title="PDF Preview">
                                 <p>お使いのブラウザはPDFの埋め込み表示をサポートしていません。<a href="${pdfPath}">こちら</a>からダウンロードしてください。</p>
@@ -6834,7 +6849,7 @@
         }
 
         // === 個別PDF作成機能 ===
-        async function generatePDF(id) {
+        async function generatePDF(id, is2Up = false) {
             let docData = MOCK_SCIENCE_DATA.find(d => d.id === id);
             if (!docData) docData = localProblems.find(d => d.id === id);
 
@@ -6845,23 +6860,55 @@
 
             try {
                 const { jsPDF } = window.jspdf;
-                const doc = new jsPDF({
-                    orientation: 'portrait',
-                    unit: 'mm',
-                    format: 'a4'
-                });
+                const { PDFDocument } = window.PDFLib;
 
-                // 標準フォント設定
-                doc.setFont('Helvetica', 'normal');
+                let portraitPdfBytes;
 
-                const images = await prepareImages(docData);
-                if (!images.problems || images.problems.length === 0) {
-                    alert('問題画像がありません');
-                    return;
+                // A. 既存のPDFファイルの場合
+                if (docData.source_pdf) {
+                    const pdfPath = `./pdfs/${docData.source_pdf}`;
+                    portraitPdfBytes = await fetch(pdfPath).then(res => {
+                        if (!res.ok) throw new Error(`PDF not found: ${pdfPath}`);
+                        return res.arrayBuffer();
+                    }).catch(err => {
+                        throw new Error(`既存PDFの読み込みに失敗しました: ${err.message}`);
+                    });
+                }
+                // B. 画像ベースの問題の場合
+                else {
+                    const doc = new jsPDF({
+                        orientation: 'portrait',
+                        unit: 'mm',
+                        format: 'a4'
+                    });
+                    doc.setFont('Helvetica', 'normal');
+
+                    const images = await prepareImages(docData);
+                    if (!images.problems || images.problems.length === 0) {
+                        alert('問題画像がありません');
+                        return;
+                    }
+
+                    await drawProblemPage(doc, docData, images, true);
+                    portraitPdfBytes = doc.output('arraybuffer');
                 }
 
-                await drawProblemPage(doc, docData, images, true);
-                doc.save(`Science_Problem_${docData.id}.pdf`);
+                let finalPdfBytes;
+                if (is2Up) {
+                    finalPdfBytes = await create2UpPdfFromPortrait(portraitPdfBytes);
+                } else {
+                    finalPdfBytes = portraitPdfBytes;
+                }
+
+                const blob = new Blob([finalPdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Science_Problem_${docData.id}${is2Up ? '_2up' : ''}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
 
             } catch (error) {
                 console.error('PDF generation error:', error);
@@ -6869,12 +6916,69 @@
             }
         }
 
+        // === 2-up PDF生成ヘルパー (A4縦のPDFバイトからA4横2面割付を作成) ===
+        async function create2UpPdfFromPortrait(portraitPdfBytes) {
+            const { PDFDocument, PDFName, PDFDict, PageSizes } = window.PDFLib;
+
+            const srcDoc = await PDFDocument.load(portraitPdfBytes);
+            const dstDoc = await PDFDocument.create();
+
+            const numPages = srcDoc.getPageCount();
+
+            // A4横のサイズ (ポイント単位: 1mm = 2.83465pts)
+            const landscapeWidth = PageSizes.A4[1];
+            const landscapeHeight = PageSizes.A4[0];
+
+            for (let i = 0; i < numPages; i += 2) {
+                const page = dstDoc.addPage([landscapeWidth, landscapeHeight]);
+
+                // 左側
+                const leftPage = await dstDoc.embedPage(srcDoc.getPages()[i]);
+                const leftDims = leftPage.scale(0.707);
+
+                const leftX = (landscapeWidth / 4) - (leftDims.width / 2);
+                const leftY = (landscapeHeight / 2) - (leftDims.height / 2);
+
+                page.drawPage(leftPage, {
+                    ...leftDims,
+                    x: leftX,
+                    y: leftY,
+                });
+
+                // 右側
+                if (i + 1 < numPages) {
+                    const rightPage = await dstDoc.embedPage(srcDoc.getPages()[i + 1]);
+                    const rightDims = rightPage.scale(0.707);
+
+                    const rightX = (3 * landscapeWidth / 4) - (rightDims.width / 2);
+                    const rightY = (landscapeHeight / 2) - (rightDims.height / 2);
+
+                    page.drawPage(rightPage, {
+                        ...rightDims,
+                        x: rightX,
+                        y: rightY,
+                    });
+                }
+            }
+
+            // 短辺とじ (Short Edge Binding) の設定
+            try {
+                const catalog = dstDoc.catalog;
+                let viewerPrefs = catalog.getOrCreateViewerPreferences();
+                viewerPrefs.set(PDFName.of('Duplex'), PDFName.of('DuplexFlipShortEdge'));
+            } catch (e) {
+                console.warn('Failed to set Duplex preference:', e);
+            }
+
+            return await dstDoc.save();
+        }
+
         // === 一括PDF作成機能 (pdf-libによる結合) ===
-        async function generateCollectedPDF() {
+        async function generateCollectedPDF(is2Up = false) {
             if (collectedProblemIds.size === 0) return;
 
-            // ローディング表示（簡易的）
-            const btn = document.querySelector('button[onclick="generateCollectedPDF()"]');
+            // ローディング表示
+            const btn = document.querySelector('button[onclick^="generateCollectedPDF"]');
             const originalText = btn.textContent;
             btn.textContent = '作成中...';
             btn.disabled = true;
@@ -6883,74 +6987,64 @@
                 const { PDFDocument } = window.PDFLib;
                 const { jsPDF } = window.jspdf;
 
-                // 新しいPDFドキュメントを作成
-                const mergedPdf = await PDFDocument.create();
-
+                const portraitMergedPdf = await PDFDocument.create();
                 const ids = Array.from(collectedProblemIds);
-                // 選択順序を守るならここでソートが必要かもしれないが、今はID順ではなく「選択（追加）順」＝Setの順序に従う
 
                 for (const id of ids) {
                     let docData = MOCK_SCIENCE_DATA.find(d => d.id === id);
                     if (!docData) docData = localProblems.find(d => d.id === id);
                     if (!docData) continue;
 
-                    // A. 既存のPDFファイルの場合
                     if (docData.source_pdf) {
                         try {
-                            // PDFファイルをfetch
                             const pdfPath = `./pdfs/${docData.source_pdf}`;
                             const pdfBytes = await fetch(pdfPath).then(res => {
                                 if (!res.ok) throw new Error(`PDF not found: ${pdfPath}`);
                                 return res.arrayBuffer();
                             }).catch(err => {
-                                throw new Error(`既存PDFの読み込みに失敗しました (${docData.id}): ${err.message}\n※ローカル(file://)環境ではブラウザのセキュリティ制限によりPDFを読み込めない場合があります。`);
+                                throw new Error(`既存PDFの読み込みに失敗しました (${docData.id}): ${err.message}`);
                             });
 
-                            // pdf-libでロード
                             const existingPdf = await PDFDocument.load(pdfBytes);
-                            // 全ページをコピー
-                            const copiedPages = await mergedPdf.copyPages(existingPdf, existingPdf.getPageIndices());
-                            copiedPages.forEach((page) => mergedPdf.addPage(page));
+                            const copiedPages = await portraitMergedPdf.copyPages(existingPdf, existingPdf.getPageIndices());
+                            copiedPages.forEach((page) => portraitMergedPdf.addPage(page));
 
                         } catch (e) {
                             console.error(`Failed to load existing PDF (${id}):`, e);
-                            // 失敗した場合、白紙にエラーを書くなどの処理も可能だが、今回はスキップまたはログのみ
                         }
                     }
-                    // B. ローカルデータ（画像）の場合
                     else {
                         const images = await prepareImages(docData);
                         if (!images.problems || images.problems.length === 0) continue;
 
-                        // jsPDFで一時的なPDFを生成
                         const doc = new jsPDF({
                             orientation: 'portrait',
                             unit: 'mm',
                             format: 'a4'
                         });
-
-                        // 標準フォント設定
                         doc.setFont('Helvetica', 'normal');
+                        await drawProblemPage(doc, docData, images, true);
 
-                        await drawProblemPage(doc, docData, images, true); // 常に先頭ページ扱い（改ページなしで開始）
-
-                        // ArrayBufferとして出力
                         const pdfArrayBuffer = doc.output('arraybuffer');
-
-                        // pdf-libでロードしてマージ
                         const localPdf = await PDFDocument.load(pdfArrayBuffer);
-                        const copiedPages = await mergedPdf.copyPages(localPdf, localPdf.getPageIndices());
-                        copiedPages.forEach((page) => mergedPdf.addPage(page));
+                        const copiedPages = await portraitMergedPdf.copyPages(localPdf, localPdf.getPageIndices());
+                        copiedPages.forEach((page) => portraitMergedPdf.addPage(page));
                     }
                 }
 
-                // 保存
-                const mergedPdfBytes = await mergedPdf.save();
-                const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+                let finalPdfBytes;
+                if (is2Up) {
+                    const portraitBytes = await portraitMergedPdf.save();
+                    finalPdfBytes = await create2UpPdfFromPortrait(portraitBytes);
+                } else {
+                    finalPdfBytes = await portraitMergedPdf.save();
+                }
+
+                const blob = new Blob([finalPdfBytes], { type: 'application/pdf' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `Combined_Science_Problems_${ids.length}.pdf`;
+                a.download = `Collected_Science_Problems_${ids.length}${is2Up ? '_2up' : ''}.pdf`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -6960,7 +7054,6 @@
                 console.error('Bulk PDF generation error:', error);
                 alert('一括PDF作成に失敗しました: ' + error.message);
             } finally {
-                // ボタン復帰
                 btn.textContent = originalText;
                 btn.disabled = false;
             }
