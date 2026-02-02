@@ -129,9 +129,9 @@
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-3xl font-bold text-indigo-700">📝 理科問題 登録</h1>
             <div class="flex gap-4">
-                <button id="exportVercelBtn"
+                <button id="exportDataBtn"
                     class="bg-purple-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-purple-700 transition-colors shadow-sm flex items-center gap-2">
-                    Start Vercel Export
+                    📤 データ書出
                 </button>
 
                 <button id="openSettingsBtn" class="text-2xl p-2 hover:bg-gray-200 rounded-full transition-colors"
@@ -2330,15 +2330,15 @@ JSON以外のテキストは出力しないでください。`
 
 <script>
     // === Vercel用書き出し機能 ===
-    // === Vercel用書き出し機能 ===
-    async function exportForVercel() {
+    // === データ書出機能 ===
+    async function handleExportData() {
         if (!dirHandle) {
             alert('先に「設定」からフォルダを選択してください');
             return;
         }
 
-        const btn = document.getElementById('exportVercelBtn');
-        const originalText = btn.textContent;
+        const btn = document.getElementById('exportDataBtn');
+        const originalText = btn.innerHTML;
 
         try {
             // 1. 出力先フォルダを選択
@@ -2350,7 +2350,7 @@ JSON以外のテキストは出力しないでください。`
             }
 
             btn.disabled = true;
-            btn.textContent = '書き出し中...';
+            btn.innerHTML = '書き出し中...';
 
             // 2. 現在のデータを取得 (IndexedDB or FileSystem)
             let problemsToExport = [];
@@ -2431,14 +2431,14 @@ JSON以外のテキストは出力しないでください。`
             alert('書き出しエラー: ' + err.message);
         } finally {
             btn.disabled = false;
-            btn.textContent = originalText;
+            btn.innerHTML = originalText;
         }
     }
 
     // Exportボタンイベント
-    const exportBtn = document.getElementById('exportVercelBtn');
-    if (exportBtn) {
-        exportBtn.addEventListener('click', exportForVercel);
+    const exportDataBtn = document.getElementById('exportDataBtn');
+    if (exportDataBtn) {
+        exportDataBtn.addEventListener('click', handleExportData);
     }
 
     // === ファイルシステムから読み込み (Export用) ===
