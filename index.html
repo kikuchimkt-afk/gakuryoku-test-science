@@ -5605,6 +5605,46 @@
             });
         }
 
+        // === 静的インデックス読み込み (追加) ===
+        async function loadFromStaticIndex() {
+            try {
+                if (isFileSystemMode) return;
+
+                console.log('Attempting to load static index.json...');
+                const response = await fetch('./index.json');
+
+                if (!response.ok) {
+                    console.warn('Static index.json not found.');
+                    return;
+                }
+
+                const data = await response.json();
+                if (Array.isArray(data) && data.length > 0) {
+                    localProblems = data;
+                    console.log('Loaded problems from static index.json:', localProblems.length);
+                    // 検索等で使用するためwindowプロパティに追加可能だが、localProblemsで十分
+                    window.isStaticMode = true; // フラグ
+
+                    // UI更新
+                    const statusEl = document.getElementById('storageStatus');
+                    if (statusEl) {
+                        statusEl.textContent = 'オンラインデータ';
+                        statusEl.className = 'text-xs font-medium px-2 py-1 rounded-full bg-blue-100 text-blue-700 border border-blue-200 shadow-sm';
+                    }
+                    const badge = document.getElementById('folderStatusBadge');
+                    if (badge) badge.textContent = 'オンライン';
+
+                    // 接続ボタン隠すなど
+                    const connectBtn = document.getElementById('connectFolderBtn');
+                    if (connectBtn) connectBtn.style.display = 'none';
+
+                    reloadAllData();
+                }
+            } catch (e) {
+                console.error('Failed to load static index:', e);
+            }
+        }
+
         // === データ再構築とリロード ===
         function reloadAllData() {
             console.log('reloadAllData: Starting...');
@@ -5722,37 +5762,9 @@
             // 削除済みサンプルデータをフィルタリング
             filterDeletedSamples();
 
-            // index.json (Vercel用エクスポートデータ) の読み込み
-            try {
-                const res = await fetch('./index.json?t=' + new Date().getTime());
-                if (res.ok) {
-                    onlineProblems = await res.json();
-                    console.log('Loaded index.json (onlineProblems):', onlineProblems.length);
-
-                    // ストレージ状態を「オンライン」に更新 (未接続時のみ)
-                    if (!isFileSystemMode) {
-                        const statusEl = document.getElementById('storageStatus');
-                        if (statusEl) {
-                            statusEl.textContent = 'オンラインデータ';
-                            statusEl.className = 'text-xs font-medium px-2 py-1 rounded-full bg-blue-100 text-blue-700 border border-blue-200 shadow-sm';
-                        }
-                        const badge = document.getElementById('folderStatusBadge');
-                        if (badge) badge.textContent = 'オンライン';
-
-                        // 接続ボタンのラベル変更
-                        const connectBtn = document.getElementById('connectFolderBtn');
-                        if (connectBtn) connectBtn.innerHTML = '📁 フォルダに接続 (編集用)';
-                    }
-
-                    // 同期状態の表示
-                    const syncStatusEl = document.getElementById('syncStatus');
-                    if (syncStatusEl) {
-                        syncStatusEl.textContent = `（公開済み: ${onlineProblems.length}件）`;
-                        syncStatusEl.classList.remove('hidden');
-                    }
-                }
-            } catch (e) {
-                console.log('No index.json found or load failed', e);
+            // ローカル問題が0件なら静的読み込みトライ
+            if (localProblems.length === 0 && !isFileSystemMode) {
+                await loadFromStaticIndex();
             }
 
             // データの前処理
