@@ -6302,7 +6302,7 @@
                             </div>
                             <div>
                                 <span class="font-semibold text-gray-600">想定ページ数:</span>
-                                <span class="text-gray-800">${doc.pageCount || '1'}ページ</span>
+                                <span class="text-gray-800">${doc.pageCount || '1'}ページ${doc.forcePageCount ? ` (📄 強制${doc.forcedPages}ページ)` : ''}</span>
                             </div>
                             <div>
                                 <span class="font-semibold text-gray-600">単元:</span>
@@ -6527,42 +6527,122 @@
             const margin = 10;
             const usableWidth = pageWidth - margin * 2;
 
-            // 問題画像の枚数分ループ
+            // === 強制ページ数モード判定 ===
+            const useForcePageMode = docData.forcePageCount && docData.forcedPages && docData.forcedPages >= 2;
+
+            // ヘッダー情報を共通化
+            const typeMap = {
+                '学力テスト': '学力テスト',
+                '基礎学力テスト': '基礎学力テスト'
+            };
+            const typeRaw = docData.testType || '';
+            const typeStr = typeMap[typeRaw] || typeRaw || 'Unknown';
+            const yearVal = docData.year || '';
+            const monthVal = docData.month ? docData.month.toString().padStart(2, '0') : '';
+            const dateStr = (yearVal && monthVal) ? `${yearVal}年${monthVal}月` : (yearVal ? `${yearVal}年度` : '');
+            const commentStr = docData.comment || '';
+            const unitStr = docData.unit || '';
+            const headerParts = [typeStr, dateStr, unitStr, commentStr].filter(s => s);
+
+            // === ヘルパー: ヘッダーを描画して現在Y位置を返す ===
+            async function drawHeader(pageLabel) {
+                const headerText = `ID:${docData.id}  ${headerParts.join('  ')}  ${pageLabel}`;
+                const headerImageBlob = await textToImage(headerText, 1200, 24);
+                const headerImage = await loadImage(headerImageBlob);
+                const headerWidth = 180;
+                const headerHeight = headerWidth * (headerImage.height / headerImage.width);
+                doc.addImage(headerImage, 'PNG', margin, margin, headerWidth, headerHeight);
+                return margin + headerHeight + 2;
+            }
+
+            // === 強制ページ数モード ===
+            if (useForcePageMode) {
+                const forcedPages = docData.forcedPages;
+
+                // --- 1. 問題画像ページ (フッターなし・全面表示) ---
+                for (let i = 0; i < images.problems.length; i++) {
+                    if (!isFirstPage || i > 0) {
+                        doc.addPage();
+                        doc.setFont('Helvetica', 'normal');
+                    }
+
+                    const currentY = await drawHeader(`(${i + 1}/${images.problems.length})`);
+                    const availableHeight = pageHeight - margin - currentY;
+
+                    // 問題画像を全面にフィット（フッターなし）
+                    if (images.problems[i]) {
+                        drawImageFit(doc, images.problems[i], margin, currentY, usableWidth, availableHeight, 'top');
+                    }
+                }
+
+                // --- 2. 解説・解答を残りのページに分散配置 ---
+                const problemPageCount = images.problems.length;
+                const remainingPages = Math.max(1, forcedPages - problemPageCount);
+
+                // 解説画像と解答画像を1つの配列にまとめる
+                const allFooterImages = [];
+                if (images.explanation) {
+                    const expArr = Array.isArray(images.explanation) ? images.explanation : [images.explanation];
+                    for (const item of expArr) {
+                        allFooterImages.push({ ...item, label: '解説' });
+                    }
+                }
+                if (images.answer) {
+                    allFooterImages.push({ ...images.answer, label: '解答' });
+                }
+
+                if (allFooterImages.length > 0) {
+                    // 画像を残りのページ数で均等に分配
+                    const imagesPerPage = Math.ceil(allFooterImages.length / remainingPages);
+
+                    for (let page = 0; page < remainingPages; page++) {
+                        doc.addPage();
+                        doc.setFont('Helvetica', 'normal');
+
+                        const startIdx = page * imagesPerPage;
+                        const endIdx = Math.min(startIdx + imagesPerPage, allFooterImages.length);
+                        const pageImages = allFooterImages.slice(startIdx, endIdx);
+
+                        if (pageImages.length === 0) continue;
+
+                        // ページラベル
+                        const labelParts = pageImages.map(img => img.label);
+                        const uniqueLabels = [...new Set(labelParts)];
+                        const currentY = await drawHeader(`[${uniqueLabels.join('・')}] (${page + 1}/${remainingPages})`);
+                        const availableHeight = pageHeight - margin - currentY;
+
+                        if (pageImages.length === 1) {
+                            // 1枚だけ: ページ全体にフィット
+                            const item = pageImages[0];
+                            drawImageFit(doc, item, margin, currentY, usableWidth, availableHeight, 'top');
+                        } else {
+                            // 複数枚: 縦に均等分割
+                            const gap = 3;
+                            const totalGap = gap * (pageImages.length - 1);
+                            const heightPerImage = (availableHeight - totalGap) / pageImages.length;
+                            let drawY = currentY;
+
+                            for (const item of pageImages) {
+                                drawImageFit(doc, item, margin, drawY, usableWidth, heightPerImage, 'top');
+                                drawY += heightPerImage + gap;
+                            }
+                        }
+                    }
+                }
+                return; // 強制モード終了
+            }
+
+            // === 通常モード (従来の動作) ===
             for (let i = 0; i < images.problems.length; i++) {
-                // ページ追加判定
                 // ページ追加判定
                 if (!isFirstPage || i > 0) {
                     doc.addPage();
                     doc.setFont('Helvetica', 'normal');
                 }
 
-                // ヘッダー描画 (画像化して日本語対応)
-                // フォーマット: 問題種別 - 年度 - 出題月 - 単元 - コメント
-                const typeMap = {
-                    '学力テスト': '学力テスト',
-                    '基礎学力テスト': '基礎学力テスト'
-                };
-                const typeRaw = docData.testType || '';
-                const typeStr = typeMap[typeRaw] || typeRaw || 'Unknown';
-
-                const yearVal = docData.year || '';
-                const monthVal = docData.month ? docData.month.toString().padStart(2, '0') : '';
-                const dateStr = (yearVal && monthVal) ? `${yearVal}年${monthVal}月` : (yearVal ? `${yearVal}年度` : '');
-
-                const commentStr = docData.comment || '';
-                const unitStr = docData.unit || '';
-
-                // 配列から空文字を除外して結合
-                const headerParts = [typeStr, dateStr, unitStr, commentStr].filter(s => s);
-                // IDも含める
                 const headerText = `ID:${docData.id}  ${headerParts.join('  ')}  (${i + 1}/${images.problems.length})`;
-
-                // テキストを画像に変換
-                // 解像度を高め(1200px)にし、相対的に文字サイズ(24px)を小さく見せる
                 const headerImageBlob = await textToImage(headerText, 1200, 24);
                 const headerImage = await loadImage(headerImageBlob);
-
-                // 画像として配置 (幅180mm程度)
                 const headerWidth = 180;
                 const headerHeight = headerWidth * (headerImage.height / headerImage.width);
                 doc.addImage(headerImage, 'PNG', margin, margin, headerWidth, headerHeight);

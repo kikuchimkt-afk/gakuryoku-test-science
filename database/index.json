@@ -1958,5 +1958,357 @@
       "LOCAL117_explanation_1.png"
     ],
     "answerImage": "LOCAL117_answer.png"
+  },
+  {
+    "id": "LOCAL118",
+    "grade": "2",
+    "unit": "音の性質",
+    "keywords": "音の3要素、振幅、振動数、オシロスコープ、ヘルツ(Hz)",
+    "year": "2025",
+    "month": "",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "2",
+    "forcePageCount": true,
+    "forcedPages": 2,
+    "createdAt": "2026-02-15T18:01:13.583Z",
+    "images": [
+      "LOCAL118_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL118_explanation_1.png",
+      "LOCAL118_explanation_2.png"
+    ],
+    "answerImage": "LOCAL118_answer.png"
+  },
+  {
+    "id": "LOCAL119",
+    "grade": "2",
+    "unit": "力のはたらき",
+    "keywords": "力のつり合い、ばねばかり、弾性力、重力、ニュートン(N)",
+    "year": "2025",
+    "month": "",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "forcePageCount": true,
+    "forcedPages": 2,
+    "createdAt": "2026-02-15T18:01:34.220Z",
+    "images": [
+      "LOCAL119_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL119_explanation_1.png",
+      "LOCAL119_explanation_2.png"
+    ],
+    "answerImage": "LOCAL119_answer.png"
+  },
+  {
+    "id": "LOCAL120",
+    "grade": "2",
+    "unit": "火山と火成岩",
+    "keywords": "斑状組織、マグマのねばりけ、火成岩の観察、鉱物、プレート",
+    "year": "2025",
+    "month": "",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "forcePageCount": true,
+    "forcedPages": 2,
+    "createdAt": "2026-02-15T18:01:50.741Z",
+    "images": [
+      "LOCAL120_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL120_explanation_1.png",
+      "LOCAL120_explanation_2.png"
+    ],
+    "answerImage": "LOCAL120_answer.png"
+  },
+  {
+    "id": "LOCAL121",
+    "grade": "2",
+    "unit": "気象観測と前線の変化",
+    "keywords": "寒冷前線、飽和水蒸気量、露点、天気図記号、等圧線",
+    "year": "2025",
+    "month": "",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "forcePageCount": true,
+    "forcedPages": 2,
+    "createdAt": "2026-02-15T18:02:05.241Z",
+    "images": [
+      "LOCAL121_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL121_explanation_1.png",
+      "LOCAL121_explanation_2.png"
+    ],
+    "answerImage": "LOCAL121_answer.png"
+  },
+  {
+    "id": "LOCAL122",
+    "grade": "2",
+    "unit": "炭酸水素ナトリウムの熱分解",
+    "keywords": "熱分解、炭酸ナトリウム、化学反応式、質量保存の法則、質量比",
+    "year": "2025",
+    "month": "",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "forcePageCount": true,
+    "forcedPages": 2,
+    "createdAt": "2026-02-15T18:02:23.088Z",
+    "images": [
+      "LOCAL122_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL122_explanation_1.png",
+      "LOCAL122_explanation_2.png"
+    ],
+    "answerImage": "LOCAL122_answer.png"
+  },
+  {
+    "id": "LOCAL123",
+    "grade": "2",
+    "unit": "気体の性質",
+    "keywords": "密度、置換法、水への溶解性、刺激臭、助燃性",
+    "year": "2025",
+    "month": "",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "forcePageCount": true,
+    "forcedPages": 2,
+    "createdAt": "2026-02-15T18:02:36.397Z",
+    "images": [
+      "LOCAL123_problem_1.png",
+      "LOCAL123_problem_2.png"
+    ],
+    "explanationImages": [
+      "LOCAL123_explanation_1.png",
+      "LOCAL123_explanation_2.png"
+    ],
+    "answerImage": "LOCAL123_answer.png"
+  },
+  {
+    "id": "LOCAL124",
+    "grade": "2",
+    "unit": "生物の観察と顕微鏡の使い方",
+    "keywords": "プランクトン、双眼実体顕微鏡、視度調節、ミカヅキモ、プレパラート",
+    "year": "2025",
+    "month": "",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "forcePageCount": true,
+    "forcedPages": 2,
+    "createdAt": "2026-02-15T18:02:51.989Z",
+    "images": [
+      "LOCAL124_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL124_explanation_1.png",
+      "LOCAL124_explanation_2.png"
+    ],
+    "answerImage": "LOCAL124_answer.png"
+  },
+  {
+    "id": "LOCAL125",
+    "grade": "2",
+    "unit": "刺激と反応",
+    "keywords": "中枢神経、感覚器官、反射、停止距離、単位換算",
+    "year": "2025",
+    "month": "",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "forcePageCount": true,
+    "forcedPages": 2,
+    "createdAt": "2026-02-15T18:03:12.527Z",
+    "images": [
+      "LOCAL125_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL125_explanation_1.png",
+      "LOCAL125_explanation_2.png"
+    ],
+    "answerImage": "LOCAL125_answer.png"
+  },
+  {
+    "id": "LOCAL126",
+    "grade": "1",
+    "unit": "コケ植物のつくり",
+    "keywords": "コケ植物 、胞子 、胞子のう 、仮根 、種子をつくらない植物",
+    "year": "2025",
+    "month": "",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "forcePageCount": true,
+    "forcedPages": 2,
+    "createdAt": "2026-02-15T18:07:04.980Z",
+    "images": [
+      "LOCAL126_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL126_explanation_1.png",
+      "LOCAL126_explanation_2.png"
+    ],
+    "answerImage": "LOCAL126_answer.png"
+  },
+  {
+    "id": "LOCAL127",
+    "grade": "1",
+    "unit": "種子植物の分類と根のつくり",
+    "keywords": "単子葉類 、双子葉類 、平行脈 、主根・側根 、根毛",
+    "year": "2025",
+    "month": "",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "forcePageCount": true,
+    "forcedPages": 2,
+    "createdAt": "2026-02-15T18:08:45.965Z",
+    "images": [
+      "LOCAL127_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL127_explanation_1.png",
+      "LOCAL127_explanation_2.png"
+    ],
+    "answerImage": "LOCAL127_answer.png"
+  },
+  {
+    "id": "LOCAL128",
+    "grade": "1",
+    "unit": "動物の体のつくりと生活",
+    "keywords": "草食動物、肉食動物、門歯・犬歯・臼歯、視野（見える範囲）、立体視（距離）",
+    "year": "2025",
+    "month": "",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "forcePageCount": true,
+    "forcedPages": 2,
+    "createdAt": "2026-02-15T18:10:41.075Z",
+    "images": [
+      "LOCAL128_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL128_explanation_1.png"
+    ],
+    "answerImage": "LOCAL128_answer.png"
+  },
+  {
+    "id": "LOCAL129",
+    "grade": "1",
+    "unit": "アンモニアの性質と噴水実験",
+    "keywords": "アンモニア、噴水実験、刺激臭、上方置換法、アルカリ性",
+    "year": "2025",
+    "month": "",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "forcePageCount": true,
+    "forcedPages": 2,
+    "createdAt": "2026-02-15T18:11:57.246Z",
+    "images": [
+      "LOCAL129_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL129_explanation_1.png",
+      "LOCAL129_explanation_2.png"
+    ],
+    "answerImage": "LOCAL129_answer.png"
+  },
+  {
+    "id": "LOCAL130",
+    "grade": "1",
+    "unit": "水溶液の性質",
+    "keywords": "溶質、溶媒、質量パーセント濃度、粒子のモデル、溶解",
+    "year": "2025",
+    "month": "",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "forcePageCount": true,
+    "forcedPages": 2,
+    "createdAt": "2026-02-15T18:14:10.911Z",
+    "images": [
+      "LOCAL130_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL130_explanation_1.png",
+      "LOCAL130_explanation_2.png"
+    ],
+    "answerImage": "LOCAL130_answer.png"
+  },
+  {
+    "id": "LOCAL131",
+    "grade": "1",
+    "unit": "状態変化と沸騰",
+    "keywords": "沸点、状態変化、沸騰石、突沸、エタノール",
+    "year": "2025",
+    "month": "",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "forcePageCount": true,
+    "forcedPages": 2,
+    "createdAt": "2026-02-15T18:15:48.772Z",
+    "images": [
+      "LOCAL131_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL131_explanation_1.png",
+      "LOCAL131_explanation_2.png"
+    ],
+    "answerImage": "LOCAL131_answer.png"
+  },
+  {
+    "id": "LOCAL132",
+    "grade": "1",
+    "unit": "光の屈折と全反射",
+    "keywords": "光の屈折、入射角、屈折角、全反射、光ファイバー",
+    "year": "2025",
+    "month": "",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "forcePageCount": true,
+    "forcedPages": 2,
+    "createdAt": "2026-02-15T18:17:38.318Z",
+    "images": [
+      "LOCAL132_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL132_explanation_1.png",
+      "LOCAL132_explanation_2.png"
+    ],
+    "answerImage": "LOCAL132_answer.png"
+  },
+  {
+    "id": "LOCAL133",
+    "grade": "1",
+    "unit": "音の性質",
+    "keywords": "振幅、振動数、ヘルツ(Hz)、モノコード、弦のはり",
+    "year": "2025",
+    "month": "",
+    "testType": "基礎学力テスト",
+    "comment": "",
+    "pageCount": "1",
+    "forcePageCount": true,
+    "forcedPages": 2,
+    "createdAt": "2026-02-15T18:19:52.516Z",
+    "images": [
+      "LOCAL133_problem_1.png"
+    ],
+    "explanationImages": [
+      "LOCAL133_explanation_1.png",
+      "LOCAL133_explanation_2.png"
+    ],
+    "answerImage": "LOCAL133_answer.png"
   }
 ]

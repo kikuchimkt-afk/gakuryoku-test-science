@@ -340,6 +340,31 @@
                             <span class="ml-2 text-gray-700">4ページ</span>
                         </label>
                     </div>
+
+                    <!-- 強制ページ数指定オプション -->
+                    <div class="mt-4 p-4 rounded-lg border border-amber-200 bg-amber-50/50">
+                        <label class="flex items-center cursor-pointer gap-2">
+                            <input type="checkbox" id="forcePageCountCheck"
+                                class="form-checkbox h-5 w-5 text-amber-600 rounded"
+                                onchange="document.getElementById('forcePageCountOptions').classList.toggle('hidden', !this.checked)">
+                            <span class="text-sm font-semibold text-amber-800">📄 PDFの総ページ数を強制指定する</span>
+                        </label>
+                        <p class="text-xs text-amber-600 mt-1 ml-7">解説が長い場合、別ページに分けて読みやすいサイズで出力します</p>
+                        <div id="forcePageCountOptions" class="hidden mt-3 ml-7">
+                            <div class="flex items-center gap-3">
+                                <label class="text-sm font-medium text-gray-700">強制総ページ数:</label>
+                                <select id="forcedPagesSelect"
+                                    class="px-3 py-1.5 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm">
+                                    <option value="2">2ページ</option>
+                                    <option value="3" selected>3ページ</option>
+                                    <option value="4">4ページ</option>
+                                    <option value="5">5ページ</option>
+                                    <option value="6">6ページ</option>
+                                </select>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">1ページ目: 問題画像 → 残りページ: 解説・解答を分散配置</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -774,6 +799,8 @@
                     testType: problemData.testType,
                     comment: problemData.comment,
                     pageCount: problemData.pageCount,
+                    forcePageCount: problemData.forcePageCount || false,
+                    forcedPages: problemData.forcedPages || null,
                     createdAt: problemData.createdAt,
                     images: imageFileNames,
                     explanationImages: explanationFileNames,
@@ -937,6 +964,19 @@
                 if (problem.pageCount) {
                     const radio = document.querySelector(`input[name="pageCount"][value="${problem.pageCount}"]`);
                     if (radio) radio.checked = true;
+                }
+
+                // 強制ページ数指定の復元
+                const forceCheck = document.getElementById('forcePageCountCheck');
+                if (problem.forcePageCount) {
+                    forceCheck.checked = true;
+                    document.getElementById('forcePageCountOptions').classList.remove('hidden');
+                    if (problem.forcedPages) {
+                        document.getElementById('forcedPagesSelect').value = String(problem.forcedPages);
+                    }
+                } else {
+                    forceCheck.checked = false;
+                    document.getElementById('forcePageCountOptions').classList.add('hidden');
                 }
 
                 document.getElementById('unitInput').value = problem.unit || '';
@@ -1631,6 +1671,10 @@ JSON以外のテキストは出力しないでください。`
             document.querySelectorAll('input[name="grade"]').forEach(r => r.checked = false);
             const defaultPage = document.querySelector('input[name="pageCount"][value="1"]');
             if (defaultPage) defaultPage.checked = true;
+            // 強制ページ数指定リセット
+            document.getElementById('forcePageCountCheck').checked = false;
+            document.getElementById('forcePageCountOptions').classList.add('hidden');
+            document.getElementById('forcedPagesSelect').value = '3';
             document.getElementById('unitInput').value = '';
             document.getElementById('keywordsInput').value = '';
             document.getElementById('commentInput').value = '';
@@ -1790,6 +1834,8 @@ JSON以外のテキストは出力しないでください。`
                     explanationBlobs: explanationImageBlobs, // 新しく配列を保存
                     answerBlob: answerImageBlob,
                     pageCount: document.querySelector('input[name="pageCount"]:checked')?.value || '1',
+                    forcePageCount: document.getElementById('forcePageCountCheck').checked,
+                    forcedPages: document.getElementById('forcePageCountCheck').checked ? parseInt(document.getElementById('forcedPagesSelect').value) : null,
                     createdAt: new Date().toISOString()
                 };
 
